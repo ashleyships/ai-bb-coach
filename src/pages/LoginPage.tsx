@@ -1,7 +1,15 @@
-import emblem from '../assets/emblem.jpg';
-import './LoginPage.css';
+import emblem from "../assets/emblem.jpg";
+import "./LoginPage.css";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    navigate("/dashboard");
+  };
+
   return (
     <main className="login-page">
       <div className="login-container">
@@ -17,8 +25,10 @@ function LoginPage() {
           (BB) never ceases
         </p>
 
-        <form className="login-form">
-          <label className="login-label" htmlFor="email">Email</label>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <label className="login-label" htmlFor="email">
+            Email
+          </label>
           <input
             className="login-input"
             id="email"
@@ -27,7 +37,9 @@ function LoginPage() {
             autoComplete="email"
           />
 
-          <label className="login-label" htmlFor="password">Password</label>
+          <label className="login-label" htmlFor="password">
+            Password
+          </label>
           <input
             className="login-input"
             id="password"
