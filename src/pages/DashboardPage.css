@@ -1,0 +1,569 @@
+/* Remove the starter shell's border and width limit only on this page. */
+#root:has(.dashboard-page) {
+  width: 100%;
+  max-width: none;
+  border: 0;
+}
+
+.dashboard-page,
+.dashboard-page * {
+  box-sizing: border-box;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  background: #fbfcfd;
+  color: #263340;
+  color-scheme: light;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.dashboard-page h1,
+.dashboard-page h2,
+.dashboard-page p {
+  margin: 0;
+  font-family: inherit;
+  color: inherit;
+}
+
+.dashboard-page h2 {
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-page button {
+  font: inherit;
+  opacity: 1;
+}
+
+/* These controls are visual placeholders until navigation is implemented. */
+.dashboard-page button:disabled {
+  cursor: default;
+}
+
+.dashboard-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 223px;
+  padding: 36px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: #f6f8fa;
+  border-right: 1px solid #e8edf1;
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-logo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  mix-blend-mode: multiply;
+}
+
+.dashboard-logo {
+  width: auto;
+  height: 65px;
+  max-width: none;
+  flex-shrink: 0;
+}
+
+.dashboard-brand-description {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+  color: #7d8997;
+}
+
+.dashboard-navigation {
+  margin-top: 62px;
+}
+
+.dashboard-page .dashboard-navigation-heading {
+  margin: 0 13px 15px;
+  font-size: 12px;
+  letter-spacing: 1.25px;
+  color: #9aa4ae;
+}
+
+.dashboard-navigation-current,
+.dashboard-page .dashboard-navigation-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 5px 0;
+  padding: 13px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #7a8591;
+  font-size: 14px;
+  text-align: left;
+}
+
+.dashboard-navigation-current {
+  color: #476e9e;
+  background: #e9eff5;
+  font-weight: 500;
+}
+
+.dashboard-navigation-icon {
+  width: 18px;
+  flex-shrink: 0;
+  font-size: 22px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.dashboard-sidebar-bottom {
+  margin-top: auto;
+}
+
+.dashboard-page .dashboard-sidebar-message {
+  padding: 22px 14px;
+  color: #98a1ab;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.dashboard-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #e4e9ee;
+  padding: 23px 7px 0;
+  font-size: 13px;
+}
+
+.dashboard-profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #dce5ed;
+  border-radius: 50%;
+  background: #e8eef3;
+  color: #70879c;
+}
+
+.dashboard-profile-role {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #9aa3ac;
+}
+
+.dashboard-profile-dot {
+  width: 5px;
+  height: 5px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #92a6b7;
+}
+
+.dashboard-page .dashboard-logout-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 11px 14px;
+  border: 0;
+  background: transparent;
+  color: #7a8591;
+  font-size: 14px;
+}
+
+.dashboard-main {
+  max-width: 1170px;
+  margin-left: 223px;
+  padding: 34px 76px 25px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+  color: #919aa5;
+}
+
+.dashboard-training-label {
+  letter-spacing: 1.8px;
+  color: #a0a9b2;
+}
+
+.dashboard-welcome {
+  margin-top: 50px;
+}
+
+.dashboard-page .dashboard-section-caption {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.65;
+  letter-spacing: 1.25px;
+  color: #85909d;
+}
+
+.dashboard-page .dashboard-heading {
+  margin-top: 12px;
+  font-size: 38px;
+  font-weight: 450;
+  line-height: 1.25;
+  letter-spacing: -1.45px;
+}
+
+.dashboard-heading-period {
+  color: #799abf;
+}
+
+.dashboard-page .dashboard-welcome-question {
+  margin-top: 13px;
+  color: #7c8794;
+  line-height: 1.65;
+}
+
+.dashboard-start-practice-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 295px;
+  margin-top: 32px;
+  padding: 28px 40px;
+  overflow: hidden;
+  border: 1px solid #e5ebf1;
+  border-radius: 19px;
+  background: linear-gradient(115deg, #f6f9fc, #f0f5fa 80%, #eef4fa);
+}
+
+.dashboard-practice-description {
+  min-width: 0;
+}
+
+.dashboard-start-practice-card .dashboard-section-caption {
+  color: #7f97ae;
+}
+
+.dashboard-start-practice-card h2 {
+  margin: 11px 0;
+  font-size: 28px;
+  line-height: 1.35;
+  letter-spacing: -0.9px;
+}
+
+.dashboard-page .dashboard-practice-message {
+  margin-bottom: 23px;
+  color: #81909f;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.dashboard-page .dashboard-start-practice-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 23px;
+  min-height: 47px;
+  padding: 12px 21px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: #4873a9;
+  color: #fff;
+  box-shadow: 0 2px 3px #2646680a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dashboard-practice-illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 19px;
+  padding: 0 15px;
+  color: #91a1b2;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* Layered gradients approximate the prototype's decorative sphere. */
+.dashboard-blue-sphere {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 26% 28%, #ffffffd9, transparent 43%),
+    radial-gradient(ellipse at 75% 57%, #94c7ff90, transparent 43%),
+    radial-gradient(ellipse at 35% 5%, #fff 0%, #effaff 18%, transparent 53%),
+    radial-gradient(ellipse at 76% 24%, #dff3ff 0%, #a8d2f5 42%, transparent 72%),
+    linear-gradient(165deg, #e6f6ff 3%, #b3d8f7 35%, #669ddf 68%, #3672c2 87%, #7294ce);
+  box-shadow: inset 0 0 16px 5px #f0f8ff44, 0 19px 36px -20px #5385bb35;
+}
+
+.dashboard-recent-training {
+  margin-top: 37px;
+}
+
+.dashboard-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.dashboard-section-header h2 {
+  font-size: 17px;
+}
+
+.dashboard-page .dashboard-history-button {
+  display: inline-flex;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #7a8693;
+  font-size: 14px;
+}
+
+.dashboard-training-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-training-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 74px 91px 16px;
+  align-items: center;
+  gap: 20px;
+  min-height: 76px;
+  border-bottom: 1px solid #e8edf1;
+  font-size: 14px;
+}
+
+.dashboard-training-lesson {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.dashboard-lesson-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 37px;
+  border: 1px solid #e9edf1;
+  border-radius: 9px;
+  background: #fafcfe;
+  color: #8097af;
+  font-size: 17px;
+}
+
+.dashboard-training-details {
+  display: block;
+  margin-top: 5px;
+  color: #929ba5;
+  font-size: 14px;
+}
+
+.dashboard-training-score {
+  color: #4b6076;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.dashboard-training-score small {
+  margin-left: 4px;
+  color: #adb5bf;
+  font-size: 12px;
+}
+
+.dashboard-training-date {
+  color: #939daa;
+  font-size: 14px;
+}
+
+.dashboard-training-arrow {
+  color: #aeb8c3;
+  font-size: 22px;
+}
+
+.dashboard-development {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 35px;
+  margin-top: 34px;
+  padding: 29px 0 10px;
+}
+
+.dashboard-development .dashboard-section-caption {
+  margin-bottom: 8px;
+}
+
+.dashboard-development h2 {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.dashboard-page .dashboard-development-message {
+  color: #7c8794;
+  font-size: 14px;
+}
+
+.dashboard-development-skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 23px 28px;
+  margin: 0;
+  font-size: 14px;
+  color: #697583;
+}
+
+.dashboard-development-skills dd {
+  margin: 8px 0 0;
+}
+
+.dashboard-skill-improving {
+  color: #79998c;
+}
+
+.dashboard-skill-steady {
+  color: #96a0ae;
+}
+
+.dashboard-footer {
+  margin-top: 32px;
+  color: #adb5be;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+@media (min-width: 1500px) {
+  .dashboard-main {
+    margin-right: auto;
+    margin-left: calc(223px + (100% - 223px - 1170px) / 2);
+    padding-top: 43px;
+  }
+  .dashboard-welcome {
+    margin-top: 64px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .dashboard-sidebar {
+    width: 188px;
+    padding-inline: 18px;
+  }
+  .dashboard-main {
+    margin-left: 188px;
+    padding-inline: 40px;
+  }
+  .dashboard-start-practice-card {
+    padding: 28px;
+  }
+  .dashboard-start-practice-card h2 {
+    font-size: 25px;
+  }
+  .dashboard-practice-illustration {
+    padding: 0;
+  }
+  .dashboard-blue-sphere {
+    width: 190px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 760px) {
+  .dashboard-sidebar {
+    position: static;
+    width: 100%;
+    padding: 16px 20px;
+    border-right: 0;
+    border-bottom: 1px solid #e8edf1;
+  }
+  .dashboard-brand {
+    font-size: 17px;
+  }
+  .dashboard-navigation {
+    display: flex;
+    gap: 3px;
+    margin-top: 16px;
+  }
+  .dashboard-navigation-current,
+  .dashboard-page .dashboard-navigation-button {
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+  .dashboard-navigation-heading,
+  .dashboard-sidebar-bottom,
+  .dashboard-page .dashboard-logout-button,
+  .dashboard-training-label,
+  .dashboard-practice-illustration,
+  .dashboard-training-date {
+    display: none;
+  }
+  .dashboard-main {
+    margin-left: 0;
+    padding: 26px 24px;
+  }
+  .dashboard-welcome {
+    margin-top: 36px;
+  }
+  .dashboard-page .dashboard-heading {
+    font-size: 30px;
+  }
+  .dashboard-start-practice-card {
+    margin-top: 25px;
+    padding: 27px;
+  }
+  .dashboard-start-practice-card h2 {
+    font-size: 24px;
+  }
+  .dashboard-desktop-break {
+    display: none;
+  }
+  .dashboard-training-row {
+    grid-template-columns: minmax(0, 1fr) 55px 16px;
+    gap: 10px;
+    padding-block: 12px;
+  }
+  .dashboard-training-lesson {
+    gap: 10px;
+    font-size: 12px;
+  }
+  .dashboard-training-details {
+    font-size: 12px;
+  }
+  .dashboard-section-header h2 {
+    font-size: 16px;
+  }
+  .dashboard-development {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
