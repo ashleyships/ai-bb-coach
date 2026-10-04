@@ -1,0 +1,158 @@
+/* Override the starter shell only while this page is mounted. */
+#root:has(.login-page) {
+  width: 100%;
+  max-width: none;
+  border: 0;
+}
+
+.login-page, .login-page * {
+  box-sizing: border-box;
+}
+
+.login-page {
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 55px 24px;
+  background: radial-gradient(ellipse at 50% 15%, #f0f6fb, transparent 47%), #fcfdfe;
+  color: #263340;
+  color-scheme: light;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+
+.login-page .login-container {
+  width: 100%;
+  max-width: 345px;
+  text-align: center;
+}
+.login-page .login-logo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 29px;
+  overflow: hidden;
+  mix-blend-mode: multiply;
+}
+.login-page .login-logo {
+  /* The source has wide white margins. Crop those, not the emblem.
+     At 198px tall, its circular artwork is approximately 107px across,
+     matching the prototype's artwork inside its 116px frame. */
+  display: block;
+  flex-shrink: 0;
+  width: auto;
+  height: 198px;
+  max-width: none;
+}
+.login-page .login-encouragement {
+  margin: 0 0 13px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.65;
+  letter-spacing: 1.25px;
+  color: #85909d;
+}
+.login-page .login-heading {
+  margin: 0;
+  color: #263340;
+  font-family: inherit;
+  font-size: 30px;
+  font-weight: 450;
+  line-height: 1.25;
+  letter-spacing: -1.1px;
+}
+.login-page .login-quote {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #8a97a5;
+}
+.login-page .login-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 35px;
+  text-align: left;
+}
+.login-page .login-label {
+  margin-bottom: 9px;
+  font-size: 14px;
+  color: #637181;
+}
+.login-page .login-input {
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
+  margin-bottom: 20px;
+  border: 1px solid #e1e7ed;
+  border-radius: 10px;
+  padding: 13px 15px;
+  background: #fff;
+  color: #435469;
+  font: inherit;
+  font-size: 14px;
+}
+.login-page .login-input::placeholder {
+  color: #a3adb7;
+  opacity: 1;
+}
+.login-page .login-submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 23px;
+  min-height: 47px;
+  margin-top: 5px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  padding: 12px 21px;
+  background: #4873a9;
+  color: #fff;
+  box-shadow: 0 2px 3px #2646680a;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.2s, transform 0.2s;
+}
+.login-page .login-submit-button:hover {
+  background: #3a6295;
+  transform: translateY(-1px);
+}
+.login-page .login-input:focus-visible, .login-page .login-submit-button:focus-visible {
+  outline: 3px solid #a9ccef;
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .login-page .login-input {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-page .login-submit-button {
+    transition: none;
+  }
+  .login-page .login-submit-button:hover {
+    transform: none;
+  }
+}
+
+.login-page .login-submit-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+}
