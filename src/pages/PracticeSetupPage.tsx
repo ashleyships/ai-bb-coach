@@ -1,3 +1,16 @@
+import type { StudentProfile } from "../types/StudentProfile";
+
+const initialStudentProfile: StudentProfile = {
+  alias: "",
+  personality: "",
+  church: "",
+  healthAndHolidays: "",
+  environment: "",
+  companion: "",
+  sproutSeeking: "",
+  additionalInformation: "",
+};
+
 function PracticeSetupPage() {
   return (
     <main>
