@@ -1,5 +1,4 @@
 export type StudentProfile = {
-  alias: string
   personality: string
   church: string
   healthAndHolidays: string
