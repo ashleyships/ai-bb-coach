@@ -174,6 +174,10 @@ function PracticeSetupPage() {
     }
   }
 
+  function handleBeginLesson() {
+    console.log("Beginning lesson");
+  }
+
   return (
     <main>
       {step === 0 && (
@@ -419,42 +423,42 @@ function PracticeSetupPage() {
         <section>
           <h2>Review</h2>
           <p>Review your setup before beginning.</p>
-          {step === 3 && (
-            <section>
-              <h2>Review</h2>
-              <p>Review your setup before beginning.</p>
 
-              <p>
-                <strong>Lesson:</strong> {lessonLabels[selectedLesson]}
-              </p>
+          <p>
+            <strong>Lesson:</strong> {lessonLabels[selectedLesson]}
+          </p>
 
-              <p>
-                <strong>Students:</strong>{" "}
-                {selectedStudent ? selectedStudent.alias : "None selected"}
-              </p>
+          <p>
+            <strong>Student:</strong>{" "}
+            {selectedStudent ? selectedStudent.alias : "None selected"}
+          </p>
 
-              <p>
-                <strong>Difficulty:</strong> {difficultyLabels[difficulty]}
-              </p>
+          <p>
+            <strong>Difficulty:</strong> {difficultyLabels[difficulty]}
+          </p>
 
-              <p>
-                <strong>Practice:</strong>{" "}
-                {practiceScope === "full" ? "Full lesson" : "Specific section"}
-              </p>
+          <p>
+            <strong>Practice:</strong>{" "}
+            {practiceScope === "full" ? "Full lesson" : "Specific section"}
+          </p>
 
-              {practiceScope === "section" && (
-                <p>
-                  <strong>Section:</strong> {sectionLabels[selectedSection]}
-                </p>
-              )}
-            </section>
+          {practiceScope === "section" && (
+            <p>
+              <strong>Section:</strong> {sectionLabels[selectedSection]}
+            </p>
           )}
         </section>
       )}
 
-      <button type="button" onClick={handleNextStep}>
-        Continue
-      </button>
+      {step === 3 ? (
+        <button type="button" onClick={handleBeginLesson}>
+          Begin Lesson
+        </button>
+      ) : (
+        <button type="button" onClick={handleNextStep}>
+          Continue
+        </button>
+      )}
       <button type="button" onClick={handlePreviousStep}>
         Back
       </button>
