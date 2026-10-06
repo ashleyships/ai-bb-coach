@@ -3,19 +3,21 @@ import { useNavigate } from "react-router-dom";
 import {
   lessonLabels,
   difficultyLabels,
-  sectionLabels,
 } from "../data/practiceOptions";
 import {
   isLessonSession,
   type LessonSession,
   type Section,
+  type PracticeScope,
 } from "../types/LessonSession";
 import emblem from "../assets/emblem.jpg";
 import "./PracticeSetupPage.css";
 import { presetStudents } from "../data/presetStudents";
-import { mbtiTypes, type MbtiType } from "../types/StudentProfile";
 import type { StudentProfile } from "../types/StudentProfile";
 import LessonStep from "../components/practice/LessonStep";
+import StudentStep from "../components/practice/StudentStep";
+import SettingsStep from "../components/practice/SettingsStep";
+import ReviewStep from "../components/practice/ReviewStep";
 
 const initialStudentProfile: StudentProfile = {
   id: "",
@@ -159,6 +161,33 @@ function PracticeSetupPage() {
     }
   }
 
+  function handlePresetSelect(id: string) {
+    setSelectedStudentId(id);
+    setCurrentStudent(initialStudentProfile);
+  }
+
+  function handleStudentSelect(studentId: string) {
+    setSelectedStudentId(studentId);
+    const student = students.find((student) => student.id === studentId);
+    if (student) {
+      setCurrentStudent(student);
+    }
+  }
+
+  function handleProfileChange<Key extends keyof StudentProfile>(
+    field: Key,
+    value: StudentProfile[Key],
+  ) {
+    setCurrentStudent({ ...currentStudent, [field]: value });
+  }
+
+  function handlePracticeScopeChange(scope: PracticeScope) {
+    setPracticeScope(scope);
+    if (scope === "full") {
+      setSelectedSection("");
+    }
+  }
+
   function handleBeginLesson() {
     if (!selectedStudent) return;
 
@@ -258,339 +287,43 @@ function PracticeSetupPage() {
           />
         )}
         {step === 1 && (
-          <section className="practice-student-section">
-            <h2>Student</h2>
-            <p>
-              Use a preset, choose a saved student, or create a new profile.
-            </p>
-            <div className="practice-preset-students">
-              <h3>Preset students</h3>
-              <p className="practice-profile-help">
-                Generic starting points for practice when you do not have a
-                specific student in mind.
-              </p>
-              <div className="practice-preset-grid">
-                {presetStudents.map((preset) => (
-                  <label className="practice-student-choice" key={preset.id}>
-                    <input
-                      type="radio"
-                      name="selected-student"
-                      value={preset.id}
-                      checked={selectedStudentId === preset.id}
-                      onChange={() => {
-                        setSelectedStudentId(preset.id);
-                        setCurrentStudent(initialStudentProfile);
-                      }}
-                    />
-                    <span>
-                      <strong>{preset.alias}</strong>
-                      <small>{preset.personality}</small>
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-            {students.length > 0 && (
-              <div className="practice-saved-students">
-                <h3>Saved students</h3>
-
-                {students.map((student) => (
-                  <label className="practice-student-choice" key={student.id}>
-                    <input
-                      type="radio"
-                      name="selected-student"
-                      value={student.id}
-                      checked={selectedStudentId === student.id}
-                      onChange={(event) => {
-                        const studentId = event.target.value;
-
-                        setSelectedStudentId(studentId);
-
-                        const student = students.find(
-                          (student) => student.id === studentId,
-                        );
-
-                        if (student) {
-                          setCurrentStudent(student);
-                        }
-                      }}
-                    />
-
-                    {student.alias}
-
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteStudent(student.id)}
-                    >
-                      Remove
-                    </button>
-                  </label>
-                ))}
-              </div>
-            )}
-            {selectedPreset ? (
-              <div className="practice-selected-preset">
-                <h3>Selected: {selectedPreset.alias}</h3>
-                <p>
-                  You can continue with this built-in profile, choose a saved
-                  student, or create a new one.
-                </p>
-                <button type="button" onClick={handleNewStudent}>
-                  New student
-                </button>
-              </div>
-            ) : (
-              <>
-                <p>Configure the student profile.</p>
-                <h3>
-                  {isEditingStudent
-                    ? `Current Student: ${currentStudent.alias}`
-                    : `New Student: ${getNextStudentAlias(students)}`}
-                </h3>
-
-                <div className="practice-profile-fields">
-                  <div className="practice-profile-field">
-                    <label htmlFor="personality">Personality</label>
-                    <textarea
-                      id="personality"
-                      value={currentStudent.personality}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          personality: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="mbtiType">MBTI Type</label>
-                    <select
-                      id="mbtiType"
-                      value={currentStudent.mbtiType ?? ""}
-                      aria-describedby="mbti-help"
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          mbtiType: event.target.value as MbtiType,
-                        });
-                      }}
-                    >
-                      <option value="">Not provided</option>
-                      {mbtiTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                    <p id="mbti-help" className="practice-profile-help">
-                      Optional. Choose a known type only; the full profile
-                      remains the primary guide.
-                    </p>
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="church">Church</label>
-                    <textarea
-                      id="church"
-                      value={currentStudent.church}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          church: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="healthAndHolidays">
-                      Health and Holidays
-                    </label>
-                    <textarea
-                      id="healthAndHolidays"
-                      value={currentStudent.healthAndHolidays}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          healthAndHolidays: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="environment">Environment</label>
-                    <textarea
-                      id="environment"
-                      value={currentStudent.environment}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          environment: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="companion">Companion</label>
-                    <textarea
-                      id="companion"
-                      value={currentStudent.companion}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          companion: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="sproutSeeking">Sprout / Seeking</label>
-                    <textarea
-                      id="sproutSeeking"
-                      value={currentStudent.sproutSeeking}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          sproutSeeking: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="practice-profile-field">
-                    <label htmlFor="additionalInformation">
-                      Additional Information
-                    </label>
-                    <textarea
-                      id="additionalInformation"
-                      value={currentStudent.additionalInformation}
-                      onChange={(event) => {
-                        setCurrentStudent({
-                          ...currentStudent,
-                          additionalInformation: event.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="practice-profile-actions">
-                  {isEditingStudent ? (
-                    <button type="button" onClick={handleUpdateStudent}>
-                      Update student
-                    </button>
-                  ) : (
-                    <button type="button" onClick={handleAddStudent}>
-                      Add student
-                    </button>
-                  )}
-                  {isEditingStudent && (
-                    <button type="button" onClick={handleNewStudent}>
-                      New student
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-          </section>
+          <StudentStep
+            presetStudents={presetStudents}
+            students={students}
+            selectedStudentId={selectedStudentId}
+            selectedPreset={selectedPreset}
+            currentStudent={currentStudent}
+            isEditingStudent={isEditingStudent}
+            nextStudentAlias={getNextStudentAlias(students)}
+            onPresetSelect={handlePresetSelect}
+            onStudentSelect={handleStudentSelect}
+            onProfileChange={handleProfileChange}
+            onAddStudent={handleAddStudent}
+            onUpdateStudent={handleUpdateStudent}
+            onDeleteStudent={handleDeleteStudent}
+            onNewStudent={handleNewStudent}
+          />
         )}
 
         {step === 2 && (
-          <section className="practice-settings-section">
-            <h2>Settings</h2>
-            <p>Configure the simulation settings.</p>
-            <label htmlFor="difficulty">Difficulty</label>
-
-            <select
-              id="difficulty"
-              value={difficulty}
-              onChange={(event) => {
-                setDifficulty(event.target.value);
-              }}
-            >
-              <option value="">Select difficulty</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-            <fieldset>
-              <legend>Practice scope</legend>
-
-              <label>
-                <input
-                  type="radio"
-                  name="practice-scope"
-                  value="full"
-                  checked={practiceScope === "full"}
-                  onChange={(event) => {
-                    setPracticeScope(event.target.value);
-                    setSelectedSection("");
-                  }}
-                />
-                Full lesson
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name="practice-scope"
-                  value="section"
-                  checked={practiceScope === "section"}
-                  onChange={(event) => {
-                    setPracticeScope(event.target.value);
-                  }}
-                />
-                Specific section
-              </label>
-            </fieldset>
-            {practiceScope === "section" && (
-              <div>
-                <label htmlFor="lesson-section">Section</label>
-
-                <select
-                  id="lesson-section"
-                  value={selectedSection}
-                  onChange={(event) => {
-                    setSelectedSection(event.target.value as Section);
-                  }}
-                >
-                  <option value="">Select a section</option>
-                  <option value="intro">Intro</option>
-                  <option value="body">Body</option>
-                  <option value="conclusion">Conclusion</option>
-                </select>
-              </div>
-            )}
-          </section>
+          <SettingsStep
+            difficulty={difficulty}
+            practiceScope={practiceScope}
+            selectedSection={selectedSection}
+            onDifficultyChange={setDifficulty}
+            onPracticeScopeChange={handlePracticeScopeChange}
+            onSectionChange={setSelectedSection}
+          />
         )}
 
         {step === 3 && (
-          <section className="practice-review-section">
-            <h2>Review</h2>
-            <p>Review your setup before beginning.</p>
-
-            <p>
-              <strong>Lesson:</strong>{" "}
-              {lessonLabels[selectedLesson as keyof typeof lessonLabels]}
-            </p>
-
-            <p>
-              <strong>Student:</strong>{" "}
-              {selectedStudent ? selectedStudent.alias : "None selected"}
-            </p>
-
-            <p>
-              <strong>Difficulty:</strong>{" "}
-              {difficultyLabels[difficulty as keyof typeof difficultyLabels]}
-            </p>
-
-            <p>
-              <strong>Practice:</strong>{" "}
-              {practiceScope === "full" ? "Full lesson" : "Specific section"}
-            </p>
-
-            {practiceScope === "section" && selectedSection && (
-              <p>
-                <strong>Section:</strong> {sectionLabels[selectedSection]}
-              </p>
-            )}
-          </section>
+          <ReviewStep
+            lessonLabel={Object.entries(lessonLabels).find(([id]) => id === selectedLesson)?.[1]}
+            selectedStudent={selectedStudent}
+            difficultyLabel={Object.entries(difficultyLabels).find(([id]) => id === difficulty)?.[1]}
+            practiceScope={practiceScope}
+            selectedSection={selectedSection}
+          />
         )}
 
         <div className="practice-step-actions">
