@@ -362,3 +362,28 @@
   .simulator-student-sphere { width: 150px; height: 150px; }
   .simulator-transcript { padding: 20px; }
 }
+
+.simulator-recording-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.simulator-recording-controls p {
+  flex: 1 1 220px;
+  color: #8593a2;
+  font-size: 12px;
+}
+
+.simulator-message-form .simulator-recording-button {
+  background: #fff;
+  color: #4873a9;
+  border-color: #d4e2ef;
+}
+
+.simulator-message-form .simulator-recording-button[aria-pressed="true"] {
+  background: #e9f0f7;
+  border-color: #82a7cd;
+}

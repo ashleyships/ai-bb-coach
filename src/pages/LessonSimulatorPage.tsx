@@ -5,6 +5,7 @@ import {
   difficultyLabels,
   sectionLabels,
 } from "../data/practiceOptions";
+import { useSpeechToText } from "../hooks/useSpeechToText";
 import { useLessonConversation } from "../hooks/useLessonConversation";
 import { isLessonSession, type LessonSession } from "../types/LessonSession";
 import "./LessonSimulatorPage.css";
@@ -36,6 +37,9 @@ function LessonSimulatorContent({
     sendMessage,
     retryResponse,
   } = useLessonConversation(initialSession);
+  const speech = useSpeechToText((text) => {
+    setDraft((previous) => (previous.trim() ? `${previous}\n${text}` : text));
+  });
   const latestStudentMessage = session?.messages.findLast(
     (message) => message.role === "student",
   );
@@ -124,9 +128,50 @@ function LessonSimulatorContent({
               className="simulator-message-form"
               onSubmit={(event) => {
                 event.preventDefault();
-                sendMessage();
+                if (!speech.isBusy) sendMessage();
               }}
             >
+              <div className="simulator-recording-controls">
+                <button
+                  type="button"
+                  className="simulator-recording-button"
+                  onClick={
+                    speech.status === "recording"
+                      ? speech.stopRecording
+                      : () => {
+                          void speech.startRecording();
+                        }
+                  }
+                  disabled={
+                    isSending ||
+                    canRetry ||
+                    speech.status === "requesting" ||
+                    speech.status === "transcribing"
+                  }
+                  aria-pressed={speech.status === "recording"}
+                >
+                  <span aria-hidden="true">
+                    {speech.status === "recording" ? "■" : "🎙"}
+                  </span>{" "}
+                  {speech.status === "recording"
+                    ? "Stop recording"
+                    : "Record speech"}
+                </button>
+                <p role="status">
+                  {speech.status === "requesting"
+                    ? "Waiting for microphone permission…"
+                    : speech.status === "recording"
+                      ? "Recording… Click Stop when finished."
+                      : speech.status === "transcribing"
+                        ? "Transcribing your recording…"
+                        : "Record, review and edit your text, then press Send. Maximum 2 minutes."}
+                </p>
+              </div>
+              {speech.error && (
+                <p className="simulator-request-error" role="alert">
+                  {speech.error}
+                </p>
+              )}
               <label htmlFor="teacher-message">Your message</label>
               <textarea
                 id="teacher-message"
@@ -139,10 +184,10 @@ function LessonSimulatorContent({
                     !event.nativeEvent.isComposing
                   ) {
                     event.preventDefault();
-                    sendMessage();
+                    if (!speech.isBusy) sendMessage();
                   }
                 }}
-                disabled={isSending || canRetry}
+                disabled={isSending || canRetry || speech.isBusy}
                 aria-describedby="simulator-message-help"
                 placeholder="Type what you would say to the student…"
                 rows={3}
@@ -153,7 +198,9 @@ function LessonSimulatorContent({
                 </p>
                 <button
                   type="submit"
-                  disabled={!draft.trim() || isSending || canRetry}
+                  disabled={
+                    !draft.trim() || isSending || canRetry || speech.isBusy
+                  }
                 >
                   {isSending ? "Waiting for student…" : "Send"}
                 </button>

@@ -78,8 +78,8 @@ export default defineConfig([
 
 The simulator supports typed teacher messages through a small server-only Vite
 middleware endpoint, `POST /api/student-response`. The official OpenAI SDK uses
-Responses API text generation. No microphone, speech, evaluation, or persistence
-is implemented.
+Responses API text generation. Teacher speech-to-text is available as described
+below; student voice output, evaluation, and persistence are not implemented.
 
 1. Run `npm install`.
 2. Copy `.env.example` to `.env` in the project root.
@@ -112,3 +112,39 @@ production backend. `npm run build` produces static frontend files only. For loc
 preview, run `npm run build` followed by `npm run preview`; the same middleware is
 available. Static hosting alone will not provide the API endpoint. Keep the Vite
 server local; authentication and deployment hardening are outside this phase.
+
+
+## Teacher speech-to-text (Phase 2A)
+
+Click **Record speech**, allow microphone access, speak, then click **Stop
+recording**. MediaRecorder sends the recording to the server-only
+`POST /api/transcribe` endpoint. The existing OpenAI SDK uses
+`audio.transcriptions.create` with `gpt-transcribe`. The returned text is appended
+to the current textarea draft. Review/edit it and press **Send** yourself;
+transcription never sends a student-conversation request automatically.
+
+The existing `OPENAI_API_KEY` is reused. Optionally set
+`OPENAI_TRANSCRIPTION_MODEL` in your local `.env` to override the transcription
+model. Restart `npm run dev` after configuration changes. No key is exposed to the
+browser, and no new dependencies are needed. This endpoint also works through
+`npm run preview`, with the same local-only hosting limitations as Phase 1.
+
+Use localhost or HTTPS and a browser supporting MediaRecorder. The app negotiates
+WebM/Opus, MP4, or Ogg/Opus support. Recordings stop automatically after two minutes
+and are limited to 10 MiB. Audio is held in memory, sent to OpenAI for transcription,
+and not written to disk by this app. Microphone tracks stop on Stop, recording
+errors, or page exit. Leaving the page aborts the browser transcription request.
+
+Manual checks:
+- Record/stop, confirm text appears, edit it, and Send. Confirm no student response
+  is requested before Send.
+- Record with an existing draft: it should be preserved and the transcription
+  appended on a new line.
+- Deny microphone permission; typed messages should still work.
+- Double-click recording controls, stop immediately, and try silence.
+- End Lesson while recording/transcribing, including while permission is pending;
+  the microphone indicator should turn off and no late text should be inserted.
+- Test Chrome and Safari, failed network/API requests, and normal Phase 1 typing.
+
+`npm test` includes offline recorder/permission/transport/provider tests. Real
+microphone capture and OpenAI transcription still require browser verification.
