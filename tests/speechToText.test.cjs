@@ -191,6 +191,7 @@ test('page appends transcription to draft without sending; Send remains explicit
       session, draft, setDraft: value => { draft = typeof value === 'function' ? value(draft) : value; },
       isSending: false, error: '', canRetry: false, sendMessage: () => { sends++; }, retryResponse() {},
     }) },
+    '../hooks/useStudentSpeech': { useStudentSpeech: () => ({ status: 'idle', error: '', canReplay: false, stop() {}, replay() {} }) },
     '../hooks/useSpeechToText': { useSpeechToText: callback => {
       transcribe = callback; return { status: 'idle', isBusy: false, error: '', startRecording() {}, stopRecording() {} };
     } },

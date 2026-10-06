@@ -1,3 +1,4 @@
+import { speechApiPlugin } from './server/speechApiPlugin.ts'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
 import { transcriptionApiPlugin } from './server/transcriptionApiPlugin.ts'
@@ -14,6 +15,9 @@ export default defineConfig(({ mode }) => {
     }), transcriptionApiPlugin({
       apiKey: process.env.OPENAI_API_KEY ?? env.OPENAI_API_KEY,
       model: process.env.OPENAI_TRANSCRIPTION_MODEL ?? env.OPENAI_TRANSCRIPTION_MODEL,
+    }), speechApiPlugin({
+      apiKey: process.env.OPENAI_API_KEY ?? env.OPENAI_API_KEY,
+      model: process.env.OPENAI_SPEECH_MODEL ?? env.OPENAI_SPEECH_MODEL,
     })],
   };
 })

@@ -79,7 +79,8 @@ export default defineConfig([
 The simulator supports typed teacher messages through a small server-only Vite
 middleware endpoint, `POST /api/student-response`. The official OpenAI SDK uses
 Responses API text generation. Teacher speech-to-text is available as described
-below; student voice output, evaluation, and persistence are not implemented.
+below; student voice output is described in Phase 2B. Evaluation and persistence
+are not implemented.
 
 1. Run `npm install`.
 2. Copy `.env.example` to `.env` in the project root.
@@ -148,3 +149,37 @@ Manual checks:
 
 `npm test` includes offline recorder/permission/transport/provider tests. Real
 microphone capture and OpenAI transcription still require browser verification.
+
+## Student text-to-speech (Phase 2B)
+
+New student replies automatically request MP3 audio from `POST /api/speech`.
+The server uses `audio.speech.create`, `gpt-4o-mini-tts`, and the `marin` voice.
+Only the response text is sent; the conversation generation and teacher recording
+flows remain separate. The existing server API key is reused. Optional
+`OPENAI_SPEECH_MODEL` overrides the Speech API model; restart Vite after changing it.
+
+The UI discloses that the voice is AI-generated and offers loading status, Stop
+and Replay. Stop cancels loading or playback. Replay generates fresh audio and
+therefore makes another API request. New replies replace older audio. Leaving the
+page aborts requests, stops playback, and releases object URLs. Audio errors do
+not disable the conversation. Existing messages do not autoplay on page entry.
+
+Browser autoplay policy may require clicking Replay. Speech is limited to 4,096
+characters per reply; longer replies remain readable without audio. No streaming,
+voice detection, automatic microphone interruption, or audio persistence is added.
+Stop student audio before recording to avoid capturing speaker output. This uses
+the same local Vite dev/preview backend as the other API endpoints.
+
+The [Speech guide](https://developers.openai.com/api/docs/guides/text-to-speech)
+still documents this non-Realtime API. The October 2026
+[deprecation notice](https://developers.openai.com/api/docs/deprecations) announces
+January 6, 2027 retirement of its dated TTS snapshots, recommending a Realtime
+replacement. Revisit the model/API before that date; Realtime is outside Phase 2B.
+
+Manual checks: send typed and transcribed messages; verify only student replies
+speak, the transcript stays intact, Stop works during loading/playback, Replay
+works after completion or autoplay blocking, newer replies replace old audio,
+and End Lesson during loading/playback prevents late audio. Simulate a failed
+speech request and confirm typing, microphone transcription, and Send still work.
+Offline tests mock provider responses and browser audio; real playback and API
+access require manual browser verification.

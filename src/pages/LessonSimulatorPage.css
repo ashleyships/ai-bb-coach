@@ -387,3 +387,34 @@
   background: #e9f0f7;
   border-color: #82a7cd;
 }
+
+.simulator-speech-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: #8593a2;
+  font-size: 12px;
+}
+
+.simulator-speech-controls button {
+  padding: 10px 14px;
+  border: 1px solid #d4e2ef;
+  border-radius: 8px;
+  background: #fff;
+  color: #4873a9;
+  font: inherit;
+  cursor: pointer;
+}
+
+.simulator-speech-controls button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.simulator-speech-controls button:focus-visible {
+  outline: 2px solid #4873a9;
+  outline-offset: 3px;
+}

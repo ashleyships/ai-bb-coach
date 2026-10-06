@@ -5,6 +5,7 @@ import {
   difficultyLabels,
   sectionLabels,
 } from "../data/practiceOptions";
+import { useStudentSpeech } from "../hooks/useStudentSpeech";
 import { useSpeechToText } from "../hooks/useSpeechToText";
 import { useLessonConversation } from "../hooks/useLessonConversation";
 import { isLessonSession, type LessonSession } from "../types/LessonSession";
@@ -43,6 +44,8 @@ function LessonSimulatorContent({
   const latestStudentMessage = session?.messages.findLast(
     (message) => message.role === "student",
   );
+
+  const studentSpeech = useStudentSpeech(latestStudentMessage);
 
   return (
     <div className="simulator-page">
@@ -99,6 +102,7 @@ function LessonSimulatorContent({
               </div>
               <Link
                 className="simulator-end-button"
+                onClick={studentSpeech.stop}
                 to="/practice-setup"
                 replace
               >
@@ -120,8 +124,25 @@ function LessonSimulatorContent({
                   "Ready for your conversation."}
               </p>
               <p className="simulator-placeholder-note">
-                Practise a conversation with your simulated student.
+                Practise a conversation with your simulated student. Voice is AI-generated.
               </p>
+              <div className="simulator-speech-controls">
+                <button type="button" onClick={studentSpeech.replay}
+                  disabled={!studentSpeech.canReplay || studentSpeech.status === "loading"}>
+                  Replay student response
+                </button>
+                <button type="button" onClick={studentSpeech.stop}
+                  disabled={studentSpeech.status !== "loading" && studentSpeech.status !== "playing"}>
+                  Stop audio
+                </button>
+                <span role="status">
+                  {studentSpeech.status === "loading" ? "Loading student audio…"
+                    : studentSpeech.status === "playing" ? "Student speaking…" : ""}
+                </span>
+              </div>
+              {studentSpeech.error && (
+                <p className="simulator-request-error" role="alert">{studentSpeech.error}</p>
+              )}
             </section>
 
             <form
