@@ -265,10 +265,6 @@
   margin-top: 26px;
 }
 
-.practice-profile-field:last-child {
-  grid-column: 1 / -1;
-}
-
 .practice-saved-students {
   margin: 24px 0;
 }
@@ -511,5 +507,63 @@
 @media (prefers-reduced-motion: reduce) {
   .practice-main button {
     transition: none;
+  }
+}
+
+/* Presets share the saved-student card treatment, but are never editable. */
+.practice-preset-students {
+  margin: 24px 0;
+}
+
+.practice-preset-students h3,
+.practice-selected-preset h3 {
+  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.practice-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.practice-preset-grid .practice-student-choice {
+  align-items: flex-start;
+  margin: 0;
+}
+
+.practice-preset-grid input {
+  margin-top: 3px;
+}
+
+.practice-preset-grid strong {
+  font-weight: 500;
+}
+
+.practice-preset-grid small {
+  display: block;
+  margin-top: 7px;
+  color: #7c8794;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.practice-setup-page .practice-profile-help,
+.practice-selected-preset p {
+  margin-top: 9px;
+  color: #7c8794;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.practice-selected-preset button {
+  margin-top: 16px;
+}
+
+@media (max-width: 760px) {
+  .practice-preset-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

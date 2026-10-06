@@ -1,0 +1,61 @@
+import type { StudentProfile } from "../types/StudentProfile";
+
+// Built-in starting points, kept separate from teacher-created saved students.
+// Empty fields mean information was not provided, rather than an assumption.
+export const presetStudents: readonly Readonly<StudentProfile>[] = [
+  {
+    id: "preset-university-student",
+    alias: "University Student",
+    personality: "Curious and willing to ask questions. Appreciates space to reflect without pressure.",
+    church: "May have limited Bible knowledge; check understanding before introducing terminology.",
+    healthAndHolidays: "",
+    environment: "Studying at university and balancing study, social activities and other commitments.",
+    companion: "",
+    sproutSeeking: "Interested in exploring how Bible study could relate to their life.",
+    additionalInformation: "Agree on a manageable pace around a changing timetable. This is a starting point, not a fixed personality.",
+  },
+  {
+    id: "preset-working-professional",
+    alias: "Working Professional",
+    personality: "Practical and thoughtful; may ask how an idea connects to everyday decisions.",
+    church: "Religious background is not specified; ask rather than assume.",
+    healthAndHolidays: "",
+    environment: "Works full time and has limited free time for study.",
+    companion: "",
+    sproutSeeking: "Interested in the relevance of the lesson to everyday life.",
+    additionalInformation: "Values clear explanations and an agreed session length. Work does not determine their beliefs or personality.",
+  },
+  {
+    id: "preset-christian-believer",
+    alias: "Christian Believer",
+    personality: "Engaged and reflective; may compare new ideas with their existing understanding.",
+    church: "Has a Christian background and knows some Bible passages. Denomination and specific beliefs are not specified.",
+    healthAndHolidays: "",
+    environment: "",
+    companion: "",
+    sproutSeeking: "Wants to explore the Bible more deeply and understand explanations in context.",
+    additionalInformation: "Invite questions and acknowledge differences respectfully; do not assume agreement or opposition.",
+  },
+  {
+    id: "preset-sceptical-student",
+    alias: "Sceptical Student",
+    personality: "Cautious about accepting claims. Asks for explanations and evidence and may challenge assumptions.",
+    church: "Religious background is not specified.",
+    healthAndHolidays: "",
+    environment: "",
+    companion: "",
+    sproutSeeking: "Willing to explore ideas when questions are welcomed and uncertainty is acknowledged.",
+    additionalInformation: "Scepticism does not imply hostility. Allow disagreement and time to consider the explanation.",
+  },
+  {
+    id: "preset-new-to-bible",
+    alias: "New to the Bible",
+    personality: "Curious and open to learning. May need time to formulate questions about unfamiliar ideas.",
+    church: "Little prior Bible knowledge and unfamiliar with biblical terminology.",
+    healthAndHolidays: "",
+    environment: "",
+    companion: "",
+    sproutSeeking: "Wants an accessible introduction with simple explanations and examples.",
+    additionalInformation: "Check understanding without assuming prior knowledge. Familiarity with the Bible does not indicate general ability.",
+  },
+];
