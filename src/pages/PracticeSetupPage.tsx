@@ -61,14 +61,35 @@ function PracticeSetupPage() {
     (student) => student.id === selectedStudentId,
   );
 
+  const isEditingStudent = currentStudent.id !== "";
+
   function handlePreviousStep() {
     if (step > 0) {
       setStep(step - 1);
     }
   }
 
+  const hasCurrentStudentInformation = Object.values(currentStudent).some(
+    (value) => value !== "",
+  );
+
   function handleNextStep() {
     if (step === 0 && selectedLesson === "") {
+      return;
+    }
+
+    if (step === 1) {
+      if (selectedStudentId !== "") {
+        setStep(step + 1);
+        return;
+      }
+
+      if (hasCurrentStudentInformation) {
+        handleAddStudent();
+        setStep(step + 1);
+        return;
+      }
+
       return;
     }
 
@@ -105,6 +126,26 @@ function PracticeSetupPage() {
     setSelectedStudentId(newStudent.id);
 
     setCurrentStudent(initialStudentProfile);
+
+    setStudents([...students, newStudent]);
+
+    setSelectedStudentId(newStudent.id);
+    setCurrentStudent(initialStudentProfile);
+
+    return newStudent;
+  }
+
+  function handleUpdateStudent() {
+    setStudents(
+      students.map((student) =>
+        student.id === currentStudent.id ? currentStudent : student,
+      ),
+    );
+  }
+
+  function handleNewStudent() {
+    setCurrentStudent(initialStudentProfile);
+    setSelectedStudentId("");
   }
 
   return (
@@ -153,7 +194,17 @@ function PracticeSetupPage() {
                     value={student.id}
                     checked={selectedStudentId === student.id}
                     onChange={(event) => {
-                      setSelectedStudentId(event.target.value);
+                      const studentId = event.target.value;
+
+                      setSelectedStudentId(studentId);
+
+                      const student = students.find(
+                        (student) => student.id === studentId,
+                      );
+
+                      if (student) {
+                        setCurrentStudent(student);
+                      }
                     }}
                   />
 
@@ -242,8 +293,17 @@ function PracticeSetupPage() {
               });
             }}
           />
-          <button type="button" onClick={handleAddStudent}>
-            Add student
+          {isEditingStudent ? (
+            <button type="button" onClick={handleUpdateStudent}>
+              Update student
+            </button>
+          ) : (
+            <button type="button" onClick={handleAddStudent}>
+              Add student
+            </button>
+          )}
+          <button type="button" onClick={handleNewStudent}>
+            New student
           </button>
         </section>
       )}
