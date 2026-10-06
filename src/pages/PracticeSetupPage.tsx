@@ -36,6 +36,18 @@ const sectionLabels: Record<string, string> = {
   conclusion: "Section 3 — Conclusion",
 };
 
+function getNextStudentAlias(students: StudentProfile[]) {
+  const usedAliases = students.map((student) => student.alias);
+
+  let index = 0;
+
+  while (usedAliases.includes(`Student ${String.fromCharCode(65 + index)}`)) {
+    index++;
+  }
+
+  return `Student ${String.fromCharCode(65 + index)}`;
+}
+
 function PracticeSetupPage() {
   const [currentStudent, setCurrentStudent] = useState<StudentProfile>(
     initialStudentProfile,
@@ -79,13 +91,19 @@ function PracticeSetupPage() {
     }
 
     if (step === 1) {
-      if (selectedStudentId !== "") {
+      if (isEditingStudent) {
+        handleUpdateStudent();
         setStep(step + 1);
         return;
       }
 
       if (hasCurrentStudentInformation) {
         handleAddStudent();
+        setStep(step + 1);
+        return;
+      }
+
+      if (selectedStudentId !== "") {
         setStep(step + 1);
         return;
       }
@@ -111,8 +129,7 @@ function PracticeSetupPage() {
 
     setCurrentStudent(initialStudentProfile);
 
-    const alias = `Student ${String.fromCharCode(65 + students.length)}`;
-
+    const alias = getNextStudentAlias(students);
     const id = crypto.randomUUID();
 
     const newStudent: StudentProfile = {
@@ -146,6 +163,15 @@ function PracticeSetupPage() {
   function handleNewStudent() {
     setCurrentStudent(initialStudentProfile);
     setSelectedStudentId("");
+  }
+
+  function handleDeleteStudent(studentId: string) {
+    setStudents(students.filter((student) => student.id !== studentId));
+
+    if (selectedStudentId === studentId) {
+      setSelectedStudentId("");
+      setCurrentStudent(initialStudentProfile);
+    }
   }
 
   return (
@@ -209,12 +235,24 @@ function PracticeSetupPage() {
                   />
 
                   {student.alias}
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteStudent(student.id)}
+                  >
+                    Remove
+                  </button>
                 </label>
               ))}
             </div>
           )}
           <p>Configure the student profile.</p>
-          <h2>Current Student: {currentStudentAlias}</h2>
+          <h2>
+            Current Student:{" "}
+            {isEditingStudent
+              ? currentStudent.alias
+              : getNextStudentAlias(students)}
+          </h2>
           <p>Current step: {step}</p>
           <label htmlFor="personality">Personality</label>
           <textarea
