@@ -1,4 +1,6 @@
 import { useState } from "react";
+import emblem from "../assets/emblem.jpg";
+import "./PracticeSetupPage.css";
 import type { StudentProfile } from "../types/StudentProfile";
 
 const initialStudentProfile: StudentProfile = {
@@ -30,11 +32,13 @@ const difficultyLabels: Record<string, string> = {
   advanced: "Advanced",
 };
 
-const sectionLabels: Record<string, string> = {
-  intro: "Section 1 — Intro",
-  body: "Section 2 — Body",
-  conclusion: "Section 3 — Conclusion",
+const sectionLabels = {
+  intro: "Intro",
+  body: "Body",
+  conclusion: "Conclusion",
 };
+
+type Section = "" | "intro" | "body" | "conclusion";
 
 function getNextStudentAlias(students: StudentProfile[]) {
   const usedAliases = students.map((student) => student.alias);
@@ -57,15 +61,13 @@ function PracticeSetupPage() {
 
   const [step, setStep] = useState(0);
 
-  const currentStudentAlias = `Student ${String.fromCharCode(65 + students.length)}`;
-
   const [selectedLesson, setSelectedLesson] = useState("");
 
   const [difficulty, setDifficulty] = useState("");
 
   const [practiceScope, setPracticeScope] = useState("full");
 
-  const [selectedSection, setSelectedSection] = useState("");
+  const [selectedSection, setSelectedSection] = useState<Section>("");
 
   const [selectedStudentId, setSelectedStudentId] = useState("");
 
@@ -179,290 +181,379 @@ function PracticeSetupPage() {
   }
 
   return (
-    <main>
-      {step === 0 && (
-        <section>
-          <h2>Lesson</h2>
-          <p>Select the lesson you want to practise.</p>
-          <label htmlFor="lesson">Lesson</label>
+    <div className="practice-setup-page">
+      <aside className="practice-sidebar" aria-label="Practice space sidebar">
+        <div className="practice-brand">
+          <span className="practice-logo-frame">
+            <img src={emblem} alt="SCJ emblem" />
+          </span>
+          <span>
+            BB<small>Speech Training</small>
+          </span>
+        </div>
+        <div className="practice-sidebar-navigation">
+          <p>YOUR SPACE</p>
+          <span>
+            <span aria-hidden="true">⌂</span> Home
+          </span>
+          <span className="practice-sidebar-current" aria-current="page">
+            <span aria-hidden="true">≋</span> Practice
+          </span>
+          <span>
+            <span aria-hidden="true">◷</span> History
+          </span>
+        </div>
+        <div className="practice-sidebar-bottom">
+          <p>
+            A space to practise.
+            <br />
+            Room to grow.
+          </p>
+          <div className="practice-sidebar-profile">
+            <span className="practice-profile-avatar" aria-hidden="true">
+              A
+            </span>
+            <span>
+              Ashley<small>Teacher</small>
+            </span>
+          </div>
+        </div>
+      </aside>
+      <main className="practice-main">
+        <header className="practice-header">Practice</header>
+        <ol
+          className="practice-step-progress"
+          aria-label="Practice setup progress"
+        >
+          {["Lesson", "Student", "Settings", "Review"].map((label, index) => (
+            <li key={label} aria-current={step === index ? "step" : undefined}>
+              {label}
+              {index < 3 && <span aria-hidden="true">→</span>}
+            </li>
+          ))}
+        </ol>
+        <header className="practice-title">
+          <p>BEGIN WITH INTENTION</p>
+          <h1>
+            {
+              [
+                "What would you like to practise?",
+                "Who are you practising with?",
+                "Set up your practice",
+                "Ready to begin?",
+              ][step]
+            }
+          </h1>
+        </header>
+        {step === 0 && (
+          <section className="practice-lesson-section">
+            <h2>Lesson</h2>
+            <p>Select the lesson you want to practise.</p>
+            <label htmlFor="lesson">Lesson</label>
 
-          <select
-            id="lesson"
-            value={selectedLesson}
-            onChange={(event) => {
-              setSelectedLesson(event.target.value);
-            }}
-          >
-            <option value="">Select a lesson</option>
-            <option value="introduction-to-bible">Introduction to Bible</option>
-            <option value="tree-by-streams">Tree by Streams</option>
-            <option value="how-to-meet-god">How to Meet God</option>
-            <option value="blessings-for-those-who-depend-on-god">
-              Blessings for Those who Depend on God
-            </option>
-            <option value="faith-like-abraham">Faith like Abraham</option>
-            <option value="why-jesus-is-the-messiah">
-              Why Jesus is the Messiah
-            </option>
-            <option value="god-and-satan">God and Satan</option>
-            <option value="four-fields">Four Fields</option>
-          </select>
-        </section>
-      )}
-      {step === 1 && (
-        <section>
-          <h2>Student</h2>
-          {students.length > 0 && (
-            <div>
-              <h3>Saved students</h3>
+            <select
+              id="lesson"
+              value={selectedLesson}
+              onChange={(event) => {
+                setSelectedLesson(event.target.value);
+              }}
+            >
+              <option value="">Select a lesson</option>
+              <option value="introduction-to-bible">
+                Introduction to Bible
+              </option>
+              <option value="tree-by-streams">Tree by Streams</option>
+              <option value="how-to-meet-god">How to Meet God</option>
+              <option value="blessings-for-those-who-depend-on-god">
+                Blessings for Those who Depend on God
+              </option>
+              <option value="faith-like-abraham">Faith like Abraham</option>
+              <option value="why-jesus-is-the-messiah">
+                Why Jesus is the Messiah
+              </option>
+              <option value="god-and-satan">God and Satan</option>
+              <option value="four-fields">Four Fields</option>
+            </select>
+          </section>
+        )}
+        {step === 1 && (
+          <section className="practice-student-section">
+            <h2>Student</h2>
+            {students.length > 0 && (
+              <div className="practice-saved-students">
+                <h3>Saved students</h3>
 
-              {students.map((student) => (
-                <label key={student.id}>
-                  <input
-                    type="radio"
-                    name="selected-student"
-                    value={student.id}
-                    checked={selectedStudentId === student.id}
-                    onChange={(event) => {
-                      const studentId = event.target.value;
+                {students.map((student) => (
+                  <label className="practice-student-choice" key={student.id}>
+                    <input
+                      type="radio"
+                      name="selected-student"
+                      value={student.id}
+                      checked={selectedStudentId === student.id}
+                      onChange={(event) => {
+                        const studentId = event.target.value;
 
-                      setSelectedStudentId(studentId);
+                        setSelectedStudentId(studentId);
 
-                      const student = students.find(
-                        (student) => student.id === studentId,
-                      );
+                        const student = students.find(
+                          (student) => student.id === studentId,
+                        );
 
-                      if (student) {
-                        setCurrentStudent(student);
-                      }
-                    }}
-                  />
+                        if (student) {
+                          setCurrentStudent(student);
+                        }
+                      }}
+                    />
 
-                  {student.alias}
+                    {student.alias}
 
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteStudent(student.id)}
-                  >
-                    Remove
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteStudent(student.id)}
+                    >
+                      Remove
+                    </button>
+                  </label>
+                ))}
+              </div>
+            )}
+            <p>Configure the student profile.</p>
+            <h3>
+              {isEditingStudent
+                ? `Current Student: ${currentStudent.alias}`
+                : `New Student: ${getNextStudentAlias(students)}`}
+            </h3>
+
+            <div className="practice-profile-fields">
+              <div className="practice-profile-field">
+                <label htmlFor="personality">Personality</label>
+                <textarea
+                  id="personality"
+                  value={currentStudent.personality}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      personality: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="practice-profile-field">
+                <label htmlFor="church">Church</label>
+                <textarea
+                  id="church"
+                  value={currentStudent.church}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      church: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="practice-profile-field">
+                <label htmlFor="healthAndHolidays">Health and Holidays</label>
+                <textarea
+                  id="healthAndHolidays"
+                  value={currentStudent.healthAndHolidays}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      healthAndHolidays: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="practice-profile-field">
+                <label htmlFor="environment">Environment</label>
+                <textarea
+                  id="environment"
+                  value={currentStudent.environment}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      environment: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="practice-profile-field">
+                <label htmlFor="companion">Companion</label>
+                <textarea
+                  id="companion"
+                  value={currentStudent.companion}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      companion: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="practice-profile-field">
+                <label htmlFor="sproutSeeking">Sprout Seeking</label>
+                <textarea
+                  id="sproutSeeking"
+                  value={currentStudent.sproutSeeking}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      sproutSeeking: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="practice-profile-field">
+                <label htmlFor="additionalInformation">
+                  Additional Information
                 </label>
-              ))}
+                <textarea
+                  id="additionalInformation"
+                  value={currentStudent.additionalInformation}
+                  onChange={(event) => {
+                    setCurrentStudent({
+                      ...currentStudent,
+                      additionalInformation: event.target.value,
+                    });
+                  }}
+                />
+              </div>
             </div>
-          )}
-          <p>Configure the student profile.</p>
-          <h2>
-            Current Student:{" "}
-            {isEditingStudent
-              ? currentStudent.alias
-              : getNextStudentAlias(students)}
-          </h2>
-          <p>Current step: {step}</p>
-          <label htmlFor="personality">Personality</label>
-          <textarea
-            id="personality"
-            value={currentStudent.personality}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                personality: event.target.value,
-              });
-            }}
-          />
-          <label htmlFor="church">Church</label>
-          <textarea
-            id="church"
-            value={currentStudent.church}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                church: event.target.value,
-              });
-            }}
-          />
-          <label htmlFor="healthAndHolidays">Health and Holidays</label>
-          <textarea
-            id="healthAndHolidays"
-            value={currentStudent.healthAndHolidays}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                healthAndHolidays: event.target.value,
-              });
-            }}
-          />
-          <label htmlFor="environment">Environment</label>
-          <textarea
-            id="environment"
-            value={currentStudent.environment}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                environment: event.target.value,
-              });
-            }}
-          />
-          <label htmlFor="companion">Companion</label>
-          <textarea
-            id="companion"
-            value={currentStudent.companion}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                companion: event.target.value,
-              });
-            }}
-          />
-          <label htmlFor="sproutSeeking">Sprout Seeking</label>
-          <textarea
-            id="sproutSeeking"
-            value={currentStudent.sproutSeeking}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                sproutSeeking: event.target.value,
-              });
-            }}
-          />
-          <label htmlFor="additionalInformation">Additional Information</label>
-          <textarea
-            id="additionalInformation"
-            value={currentStudent.additionalInformation}
-            onChange={(event) => {
-              setCurrentStudent({
-                ...currentStudent,
-                additionalInformation: event.target.value,
-              });
-            }}
-          />
-          {isEditingStudent ? (
-            <button type="button" onClick={handleUpdateStudent}>
-              Update student
+            <div className="practice-profile-actions">
+              {isEditingStudent ? (
+                <button type="button" onClick={handleUpdateStudent}>
+                  Update student
+                </button>
+              ) : (
+                <button type="button" onClick={handleAddStudent}>
+                  Add student
+                </button>
+              )}
+              {isEditingStudent && (
+                <button type="button" onClick={handleNewStudent}>
+                  New student
+                </button>
+              )}
+            </div>
+          </section>
+        )}
+
+        {step === 2 && (
+          <section className="practice-settings-section">
+            <h2>Settings</h2>
+            <p>Configure the simulation settings.</p>
+            <label htmlFor="difficulty">Difficulty</label>
+
+            <select
+              id="difficulty"
+              value={difficulty}
+              onChange={(event) => {
+                setDifficulty(event.target.value);
+              }}
+            >
+              <option value="">Select difficulty</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+            <fieldset>
+              <legend>Practice scope</legend>
+
+              <label>
+                <input
+                  type="radio"
+                  name="practice-scope"
+                  value="full"
+                  checked={practiceScope === "full"}
+                  onChange={(event) => {
+                    setPracticeScope(event.target.value);
+                    setSelectedSection("");
+                  }}
+                />
+                Full lesson
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="practice-scope"
+                  value="section"
+                  checked={practiceScope === "section"}
+                  onChange={(event) => {
+                    setPracticeScope(event.target.value);
+                  }}
+                />
+                Specific section
+              </label>
+            </fieldset>
+            {practiceScope === "section" && (
+              <div>
+                <label htmlFor="lesson-section">Section</label>
+
+                <select
+                  id="lesson-section"
+                  value={selectedSection}
+                  onChange={(event) => {
+                    setSelectedSection(event.target.value as Section);
+                  }}
+                >
+                  <option value="">Select a section</option>
+                  <option value="intro">Intro</option>
+                  <option value="body">Body</option>
+                  <option value="conclusion">Conclusion</option>
+                </select>
+              </div>
+            )}
+          </section>
+        )}
+
+        {step === 3 && (
+          <section className="practice-review-section">
+            <h2>Review</h2>
+            <p>Review your setup before beginning.</p>
+
+            <p>
+              <strong>Lesson:</strong> {lessonLabels[selectedLesson]}
+            </p>
+
+            <p>
+              <strong>Student:</strong>{" "}
+              {selectedStudent ? selectedStudent.alias : "None selected"}
+            </p>
+
+            <p>
+              <strong>Difficulty:</strong> {difficultyLabels[difficulty]}
+            </p>
+
+            <p>
+              <strong>Practice:</strong>{" "}
+              {practiceScope === "full" ? "Full lesson" : "Specific section"}
+            </p>
+
+            {practiceScope === "section" && selectedSection && (
+              <p>
+                <strong>Section:</strong> {sectionLabels[selectedSection]}
+              </p>
+            )}
+          </section>
+        )}
+
+        <div className="practice-step-actions">
+          {step === 3 ? (
+            <button type="button" onClick={handleBeginLesson}>
+              Begin Lesson
             </button>
           ) : (
-            <button type="button" onClick={handleAddStudent}>
-              Add student
+            <button type="button" onClick={handleNextStep}>
+              Continue
             </button>
           )}
-          <button type="button" onClick={handleNewStudent}>
-            New student
+          <button type="button" onClick={handlePreviousStep}>
+            Back
           </button>
-        </section>
-      )}
-
-      {step === 2 && (
-        <section>
-          <h2>Settings</h2>
-          <p>Configure the simulation settings.</p>
-          <label htmlFor="difficulty">Difficulty</label>
-
-          <select
-            id="difficulty"
-            value={difficulty}
-            onChange={(event) => {
-              setDifficulty(event.target.value);
-            }}
-          >
-            <option value="">Select difficulty</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-          </select>
-          <fieldset>
-            <legend>Practice scope</legend>
-
-            <label>
-              <input
-                type="radio"
-                name="practice-scope"
-                value="full"
-                checked={practiceScope === "full"}
-                onChange={(event) => {
-                  setPracticeScope(event.target.value);
-                  setSelectedSection("");
-                }}
-              />
-              Full lesson
-            </label>
-
-            <label>
-              <input
-                type="radio"
-                name="practice-scope"
-                value="section"
-                checked={practiceScope === "section"}
-                onChange={(event) => {
-                  setPracticeScope(event.target.value);
-                }}
-              />
-              Specific section
-            </label>
-          </fieldset>
-          {practiceScope === "section" && (
-            <div>
-              <label htmlFor="lesson-section">Section</label>
-
-              <select
-                id="lesson-section"
-                value={selectedSection}
-                onChange={(event) => {
-                  setSelectedSection(event.target.value);
-                }}
-              >
-                <option value="">Select a section</option>
-                <option value="intro">Section 1 — Intro</option>
-                <option value="body">Section 2 — Body</option>
-                <option value="conclusion">Section 3 — Conclusion</option>
-              </select>
-            </div>
-          )}
-        </section>
-      )}
-
-      {step === 3 && (
-        <section>
-          <h2>Review</h2>
-          <p>Review your setup before beginning.</p>
-
-          <p>
-            <strong>Lesson:</strong> {lessonLabels[selectedLesson]}
-          </p>
-
-          <p>
-            <strong>Student:</strong>{" "}
-            {selectedStudent ? selectedStudent.alias : "None selected"}
-          </p>
-
-          <p>
-            <strong>Difficulty:</strong> {difficultyLabels[difficulty]}
-          </p>
-
-          <p>
-            <strong>Practice:</strong>{" "}
-            {practiceScope === "full" ? "Full lesson" : "Specific section"}
-          </p>
-
-          {practiceScope === "section" && (
-            <p>
-              <strong>Section:</strong> {sectionLabels[selectedSection]}
-            </p>
-          )}
-        </section>
-      )}
-
-      {step === 3 ? (
-        <button type="button" onClick={handleBeginLesson}>
-          Begin Lesson
-        </button>
-      ) : (
-        <button type="button" onClick={handleNextStep}>
-          Continue
-        </button>
-      )}
-      <button type="button" onClick={handlePreviousStep}>
-        Back
-      </button>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 }
 
