@@ -73,3 +73,42 @@ export default defineConfig([
 ])
 
 ```
+
+## Local student conversation
+
+The simulator supports typed teacher messages through a small server-only Vite
+middleware endpoint, `POST /api/student-response`. The official OpenAI SDK uses
+Responses API text generation. No microphone, speech, evaluation, or persistence
+is implemented.
+
+1. Run `npm install`.
+2. Copy `.env.example` to `.env` in the project root.
+3. Set `OPENAI_API_KEY` in `.env` to your API key. Do not use a `VITE_` prefix.
+4. Optionally set `OPENAI_MODEL` to a model available to your OpenAI project.
+   When blank, the server uses `gpt-6-astra`.
+5. Run `npm run dev`. Restart it after changing environment variables.
+6. Open `/dashboard`, configure a practice session, and choose **Begin Lesson**.
+   Enter sends a message; Shift+Enter inserts a newline.
+
+The server receives the complete selected student profile and text transcript on
+each turn. Teacher messages map to `user` and student messages to `assistant`.
+The profile is context, not an instruction source, and missing MBTI is not inferred.
+Responses use `store: false`. Only the server imports the OpenAI SDK; the key is
+never included in browser code. `.env` and environment-specific files are ignored
+by Git; `.env.example` contains empty variable names only.
+
+While waiting for a reply, sends are disabled. If a request fails, **Retry student
+response** reuses the pending transcript without adding a second teacher message.
+End Lesson returns to the preserved Setup screen. Conversation changes are local
+to the simulator and are not persisted across page reloads.
+
+Run `npm run build`, `npm run lint`, and `npm test` for checks. Tests use offline
+provider/fetch doubles and make no paid API calls. Manually check both preset and
+custom profiles, full/section practice, Enter/Shift+Enter, loading, errors/retry,
+and End Lesson in the browser with your key configured.
+
+This endpoint is a **local development/preview foundation**, not a deployed
+production backend. `npm run build` produces static frontend files only. For local
+preview, run `npm run build` followed by `npm run preview`; the same middleware is
+available. Static hosting alone will not provide the API endpoint. Keep the Vite
+server local; authentication and deployment hardening are outside this phase.

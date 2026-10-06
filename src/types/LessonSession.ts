@@ -1,5 +1,5 @@
-import { lessonLabels, difficultyLabels, sectionLabels } from "../data/practiceOptions";
-import { mbtiTypes, type StudentProfile } from "./StudentProfile";
+import { lessonLabels, difficultyLabels, sectionLabels } from "../data/practiceOptions.ts";
+import { mbtiTypes, type StudentProfile } from "./StudentProfile.ts";
 
 export type LessonId = keyof typeof lessonLabels;
 export type Difficulty = keyof typeof difficultyLabels;

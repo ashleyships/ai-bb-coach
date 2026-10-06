@@ -208,66 +208,91 @@
 }
 
 .simulator-page .simulator-placeholder-note,
-.simulator-page .simulator-voice-status,
 .simulator-page .simulator-transcript-note {
   color: #8593a2;
   font-size: 12px;
   line-height: 1.7;
 }
 
-.simulator-speaking-controls {
-  padding: 10px 0 32px;
-  text-align: center;
+/* Typed interaction for the first simulator phase. */
+.simulator-message-form {
+  margin: 8px 0 28px;
 }
 
-.simulator-microphone-button {
-  display: grid;
-  place-items: center;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 12px;
-  border: 1px solid #d4e2ef;
-  border-radius: 50%;
-  background: #e9f0f7;
-  color: #628ab6;
-  cursor: not-allowed;
-}
-
-/* A simple decorative microphone; no audio behaviour is attached. */
-.simulator-microphone-icon {
-  position: relative;
-  width: 14px;
-  height: 24px;
-  border: 2px solid currentColor;
-  border-radius: 8px;
-}
-
-.simulator-microphone-icon::before {
-  content: "";
-  position: absolute;
-  top: 9px;
-  left: -7px;
-  width: 24px;
-  height: 19px;
-  border: 2px solid currentColor;
-  border-top: 0;
-  border-radius: 0 0 14px 14px;
-}
-
-.simulator-microphone-icon::after {
-  content: "";
-  position: absolute;
-  top: 26px;
-  left: 4px;
-  width: 2px;
-  height: 7px;
-  background: currentColor;
-}
-
-.simulator-page .simulator-speaking-label {
-  margin-bottom: 4px;
+.simulator-message-form label {
+  display: block;
+  margin-bottom: 9px;
   color: #637181;
   font-size: 14px;
+}
+
+.simulator-message-form textarea {
+  width: 100%;
+  min-height: 104px;
+  resize: vertical;
+  padding: 13px 15px;
+  border: 1px solid #e1e7ed;
+  border-radius: 10px;
+  background: #fff;
+  color: #435469;
+  font: inherit;
+  font-size: 16px;
+}
+
+.simulator-message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.simulator-message-actions p,
+.simulator-request-status {
+  color: #8593a2;
+  font-size: 12px;
+}
+
+.simulator-message-form button {
+  min-height: 47px;
+  padding: 12px 21px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: #4873a9;
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.simulator-message-form button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.simulator-message-form textarea:focus-visible,
+.simulator-message-form button:focus-visible {
+  outline: 3px solid #a9ccef;
+  outline-offset: 4px;
+}
+
+.simulator-request-status {
+  min-height: 20px;
+  margin-top: 8px;
+}
+
+.simulator-request-error {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid #e7d1d1;
+  border-radius: 10px;
+  color: #914a4a;
+  font-size: 14px;
+}
+
+.simulator-request-error button {
+  margin-top: 12px;
 }
 
 .simulator-transcript {

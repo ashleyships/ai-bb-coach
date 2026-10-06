@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  lessonLabels,
-  difficultyLabels,
-} from "../data/practiceOptions";
+import { lessonLabels, difficultyLabels } from "../data/practiceOptions";
 import {
   isLessonSession,
   type LessonSession,
@@ -318,9 +315,17 @@ function PracticeSetupPage() {
 
         {step === 3 && (
           <ReviewStep
-            lessonLabel={Object.entries(lessonLabels).find(([id]) => id === selectedLesson)?.[1]}
+            lessonLabel={
+              Object.entries(lessonLabels).find(
+                ([id]) => id === selectedLesson,
+              )?.[1]
+            }
             selectedStudent={selectedStudent}
-            difficultyLabel={Object.entries(difficultyLabels).find(([id]) => id === difficulty)?.[1]}
+            difficultyLabel={
+              Object.entries(difficultyLabels).find(
+                ([id]) => id === difficulty,
+              )?.[1]
+            }
             practiceScope={practiceScope}
             selectedSection={selectedSection}
           />
