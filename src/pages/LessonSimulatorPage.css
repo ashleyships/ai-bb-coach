@@ -1,0 +1,339 @@
+#root:has(.simulator-page) {
+  width: 100%;
+  max-width: none;
+  border: 0;
+}
+
+.simulator-page,
+.simulator-page * {
+  box-sizing: border-box;
+}
+
+.simulator-page {
+  min-height: 100svh;
+  background: #fbfcfd;
+  color: #263340;
+  color-scheme: light;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.simulator-page h1,
+.simulator-page h2,
+.simulator-page p {
+  margin: 0;
+  font-family: inherit;
+  color: inherit;
+}
+
+.simulator-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  width: 223px;
+  padding: 36px 24px 20px;
+  border-right: 1px solid #e8edf1;
+  background: #f6f8fa;
+}
+
+.simulator-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.simulator-brand small {
+  display: block;
+  color: #7d8997;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+}
+
+.simulator-logo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  mix-blend-mode: multiply;
+}
+
+.simulator-logo-frame img {
+  flex-shrink: 0;
+  width: auto;
+  height: 65px;
+  max-width: none;
+}
+
+.simulator-sidebar .simulator-navigation-label {
+  margin: 62px 13px 15px;
+  color: #9aa4ae;
+  font-size: 12px;
+  letter-spacing: 1.25px;
+}
+
+.simulator-navigation-item,
+.simulator-navigation-current {
+  margin: 5px 0;
+  padding: 13px 14px;
+  border-radius: 10px;
+  color: #7a8591;
+  font-size: 14px;
+  word-spacing: 8px;
+}
+
+.simulator-navigation-current {
+  color: #476e9e;
+  background: #e9eff5;
+  font-weight: 500;
+}
+
+.simulator-sidebar .simulator-sidebar-note {
+  margin-top: auto;
+  padding: 22px 14px;
+  color: #98a1ab;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.simulator-main {
+  max-width: 1170px;
+  margin-left: 223px;
+  padding: 34px 76px 40px;
+}
+
+.simulator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid #e8edf1;
+}
+
+.simulator-page .simulator-caption {
+  color: #85909d;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.25px;
+}
+
+.simulator-page h1 {
+  margin: 12px 0;
+  font-size: 30px;
+  font-weight: 450;
+  line-height: 1.25;
+  letter-spacing: -1px;
+  overflow-wrap: anywhere;
+}
+
+.simulator-page .simulator-context {
+  margin-top: 5px;
+  color: #7c8794;
+  font-size: 14px;
+}
+
+.simulator-end-button,
+.simulator-return-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 47px;
+  padding: 12px 21px;
+  border: 1px solid #e8edf1;
+  border-radius: 11px;
+  background: #fff;
+  color: #536170;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.simulator-end-button:hover {
+  background: #f3f6f9;
+}
+
+.simulator-return-button {
+  margin-top: 24px;
+  background: #4873a9;
+  color: #fff;
+}
+
+.simulator-page a:focus-visible {
+  outline: 3px solid #a9ccef;
+  outline-offset: 4px;
+}
+
+.simulator-student {
+  padding: 36px 0 24px;
+  text-align: center;
+}
+
+.simulator-student-sphere {
+  width: 190px;
+  height: 190px;
+  margin: 24px auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 26% 28%, #ffffffd9, transparent 43%),
+    radial-gradient(ellipse at 75% 57%, #94c7ff90, transparent 43%),
+    radial-gradient(ellipse at 35% 5%, #fff 0%, #effaff 18%, transparent 53%),
+    radial-gradient(ellipse at 76% 24%, #dff3ff 0%, #a8d2f5 42%, transparent 72%),
+    linear-gradient(165deg, #e6f6ff 3%, #b3d8f7 35%, #669ddf 68%, #3672c2 87%, #7294ce);
+  box-shadow: inset 0 0 16px 5px #f0f8ff44, 0 19px 36px -20px #5385bb35;
+}
+
+.simulator-student h2 {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.simulator-page .simulator-student-message {
+  margin: 12px auto;
+  max-width: 600px;
+  color: #637e98;
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+
+.simulator-page .simulator-placeholder-note,
+.simulator-page .simulator-voice-status,
+.simulator-page .simulator-transcript-note {
+  color: #8593a2;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.simulator-speaking-controls {
+  padding: 10px 0 32px;
+  text-align: center;
+}
+
+.simulator-microphone-button {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 12px;
+  border: 1px solid #d4e2ef;
+  border-radius: 50%;
+  background: #e9f0f7;
+  color: #628ab6;
+  cursor: not-allowed;
+}
+
+/* A simple decorative microphone; no audio behaviour is attached. */
+.simulator-microphone-icon {
+  position: relative;
+  width: 14px;
+  height: 24px;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+}
+
+.simulator-microphone-icon::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: -7px;
+  width: 24px;
+  height: 19px;
+  border: 2px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+}
+
+.simulator-microphone-icon::after {
+  content: "";
+  position: absolute;
+  top: 26px;
+  left: 4px;
+  width: 2px;
+  height: 7px;
+  background: currentColor;
+}
+
+.simulator-page .simulator-speaking-label {
+  margin-bottom: 4px;
+  color: #637181;
+  font-size: 14px;
+}
+
+.simulator-transcript {
+  padding: 25px;
+  border: 1px solid #e3e8ed;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.simulator-transcript h2 {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.simulator-transcript ol {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.simulator-message {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-left: 2px solid #b8cde1;
+  background: #f6f9fd;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.simulator-message-teacher {
+  border-left-color: #a6bcae;
+  background: #f4f7f5;
+}
+
+.simulator-message-role {
+  display: block;
+  margin-bottom: 6px;
+  color: #5e7b99;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.simulator-message-teacher .simulator-message-role {
+  color: #647f70;
+}
+
+.simulator-empty {
+  padding-top: 48px;
+}
+
+@media (max-width: 1100px) {
+  .simulator-sidebar { width: 188px; padding-inline: 18px; }
+  .simulator-main { margin-left: 188px; padding-inline: 40px; }
+}
+
+@media (max-width: 760px) {
+  .simulator-sidebar { position: static; width: 100%; padding: 16px 24px; border-right: 0; border-bottom: 1px solid #e8edf1; }
+  .simulator-sidebar .simulator-navigation-label,
+  .simulator-navigation-item,
+  .simulator-navigation-current,
+  .simulator-sidebar .simulator-sidebar-note { display: none; }
+  .simulator-main { margin-left: 0; padding: 26px 24px; }
+  .simulator-header { flex-direction: column; gap: 16px; }
+  .simulator-page h1 { font-size: 26px; }
+  .simulator-student-sphere { width: 150px; height: 150px; }
+  .simulator-transcript { padding: 20px; }
+}

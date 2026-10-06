@@ -1,9 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  lessonLabels,
+  difficultyLabels,
+  sectionLabels,
+} from "../data/practiceOptions";
+import {
+  isLessonSession,
+  type LessonSession,
+  type Section,
+} from "../types/LessonSession";
 import emblem from "../assets/emblem.jpg";
 import "./PracticeSetupPage.css";
 import { presetStudents } from "../data/presetStudents";
 import { mbtiTypes, type MbtiType } from "../types/StudentProfile";
 import type { StudentProfile } from "../types/StudentProfile";
+import LessonStep from "../components/practice/LessonStep";
 
 const initialStudentProfile: StudentProfile = {
   id: "",
@@ -17,32 +29,6 @@ const initialStudentProfile: StudentProfile = {
   sproutSeeking: "",
   additionalInformation: "",
 };
-const lessonLabels: Record<string, string> = {
-  "introduction-to-bible": "Introduction to Bible",
-  "tree-by-streams": "Tree by Streams",
-  "how-to-meet-god": "How to Meet God",
-  "blessings-for-those-who-depend-on-god":
-    "Blessings for Those who Depend on God",
-  "faith-like-abraham": "Faith like Abraham",
-  "why-jesus-is-the-messiah": "Why Jesus is the Messiah",
-  "god-and-satan": "God and Satan",
-  "four-fields": "Four Fields",
-};
-
-const difficultyLabels: Record<string, string> = {
-  beginner: "Beginner",
-  intermediate: "Intermediate",
-  advanced: "Advanced",
-};
-
-const sectionLabels = {
-  intro: "Intro",
-  body: "Body",
-  conclusion: "Conclusion",
-};
-
-type Section = "" | "intro" | "body" | "conclusion";
-
 function getNextStudentAlias(students: StudentProfile[]) {
   const usedAliases = students.map((student) => student.alias);
 
@@ -56,6 +42,7 @@ function getNextStudentAlias(students: StudentProfile[]) {
 }
 
 function PracticeSetupPage() {
+  const navigate = useNavigate();
   const [currentStudent, setCurrentStudent] = useState<StudentProfile>(
     initialStudentProfile,
   );
@@ -70,7 +57,7 @@ function PracticeSetupPage() {
 
   const [practiceScope, setPracticeScope] = useState("full");
 
-  const [selectedSection, setSelectedSection] = useState<Section>("");
+  const [selectedSection, setSelectedSection] = useState<Section | "">("");
 
   const [selectedStudentId, setSelectedStudentId] = useState("");
 
@@ -173,7 +160,30 @@ function PracticeSetupPage() {
   }
 
   function handleBeginLesson() {
-    console.log("Beginning lesson");
+    if (!selectedStudent) return;
+
+    // Copy the full profile so this attempt never mutates a saved student.
+    const session = {
+      id: crypto.randomUUID(),
+      lessonId: selectedLesson,
+      student: { ...selectedStudent },
+      difficulty,
+      practiceScope,
+      ...(practiceScope === "section" ? { selectedSection } : {}),
+      messages: [
+        {
+          id: crypto.randomUUID(),
+          role: "student",
+          content: "Hi, I'm ready.",
+          timestamp: Date.now(),
+        },
+      ],
+    };
+
+    // Also validate at the launch boundary, independently of step navigation.
+    if (!isLessonSession(session)) return;
+    const completedSession: LessonSession = session;
+    navigate("/lesson-simulator", { state: completedSession });
   }
 
   return (
@@ -242,35 +252,10 @@ function PracticeSetupPage() {
           </h1>
         </header>
         {step === 0 && (
-          <section className="practice-lesson-section">
-            <h2>Lesson</h2>
-            <p>Select the lesson you want to practise.</p>
-            <label htmlFor="lesson">Lesson</label>
-
-            <select
-              id="lesson"
-              value={selectedLesson}
-              onChange={(event) => {
-                setSelectedLesson(event.target.value);
-              }}
-            >
-              <option value="">Select a lesson</option>
-              <option value="introduction-to-bible">
-                Introduction to Bible
-              </option>
-              <option value="tree-by-streams">Tree by Streams</option>
-              <option value="how-to-meet-god">How to Meet God</option>
-              <option value="blessings-for-those-who-depend-on-god">
-                Blessings for Those who Depend on God
-              </option>
-              <option value="faith-like-abraham">Faith like Abraham</option>
-              <option value="why-jesus-is-the-messiah">
-                Why Jesus is the Messiah
-              </option>
-              <option value="god-and-satan">God and Satan</option>
-              <option value="four-fields">Four Fields</option>
-            </select>
-          </section>
+          <LessonStep
+            selectedLesson={selectedLesson}
+            onLessonChange={setSelectedLesson}
+          />
         )}
         {step === 1 && (
           <section className="practice-student-section">
@@ -581,7 +566,8 @@ function PracticeSetupPage() {
             <p>Review your setup before beginning.</p>
 
             <p>
-              <strong>Lesson:</strong> {lessonLabels[selectedLesson]}
+              <strong>Lesson:</strong>{" "}
+              {lessonLabels[selectedLesson as keyof typeof lessonLabels]}
             </p>
 
             <p>
@@ -590,7 +576,8 @@ function PracticeSetupPage() {
             </p>
 
             <p>
-              <strong>Difficulty:</strong> {difficultyLabels[difficulty]}
+              <strong>Difficulty:</strong>{" "}
+              {difficultyLabels[difficulty as keyof typeof difficultyLabels]}
             </p>
 
             <p>
