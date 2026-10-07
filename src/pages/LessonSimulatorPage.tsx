@@ -53,7 +53,10 @@ function RealtimeLessonScreen({ session }: { session: LessonSession }) {
         </p>
         <div className={`simulator-student-orb simulator-student-orb-${view.status}`} aria-hidden="true" />
         <h2 id="simulator-student-name">{session.student.alias}</h2>
-        <p className="simulator-status" role="status">{statusText}</p>
+        <p className="simulator-status" role="status">
+          <span className="simulator-status-indicator" aria-hidden="true"><i /><i /><i /></span>
+          {statusText}
+        </p>
         {view.error && (
           <div className="simulator-error" role="alert">
             <p>{view.error}</p>
@@ -66,18 +69,22 @@ function RealtimeLessonScreen({ session }: { session: LessonSession }) {
         <p className="simulator-timer" aria-label={`Elapsed lesson time ${duration}`}>{duration}</p>
         <button className="simulator-microphone-button" onClick={toggleMute}
           aria-label={view.teacherMuted ? "Unmute microphone" : "Mute microphone"}
+          title={view.teacherMuted ? "Unmute microphone" : "Mute microphone"}
           aria-pressed={view.teacherMuted}
           disabled={view.status === "connecting" || view.status === "error" || view.status === "ended"}
           aria-describedby="simulator-microphone-status">
-          <span className="simulator-microphone-icon" aria-hidden="true" />
+          <svg className="simulator-microphone-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="9" y="2" width="6" height="12" rx="3" />
+            <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3" />
+          </svg>
+          <span className="simulator-microphone-slash" aria-hidden="true" />
         </button>
-        <p id="simulator-microphone-status" className="simulator-microphone-status">
+        <p id="simulator-microphone-status" className="simulator-accessible-description">
           {view.microphoneUnavailable ? "Microphone unavailable"
             : view.teacherMuted ? "Muted by you"
             : view.microphoneSuppressed ? "Microphone paused while the student responds"
             : view.status === "listening" ? "Microphone on" : "Microphone inactive"}
         </p>
-        <p className="simulator-disclosure">Simulated student · AI-generated voice</p>
       </footer>
     </main>
   );

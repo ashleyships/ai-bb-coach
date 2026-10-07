@@ -1,66 +1,343 @@
+/* Registered properties let state changes blend without restarting the breathing cycle. */
+@property --orb-expansion {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --orb-energy {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 #root:has(.simulator-page) {
   width: 100%;
   max-width: none;
   border: 0;
 }
 
-.simulator-page, .simulator-page * { box-sizing: border-box; }
+.simulator-page,
+.simulator-page * {
+  box-sizing: border-box;
+}
+
 .simulator-page {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(ellipse at center, #f4f8fc 0%, #fbfcfd 70%);
-  color: #263340;
+  padding: clamp(22px, 4svh, 40px) clamp(20px, 3vw, 60px) 18px;
+  background: radial-gradient(ellipse at 50% 44%, #f4f8fd 0%, #fbfcfd 65%, #fdfefe 100%);
+  color: #2d3946;
   color-scheme: light;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   text-align: center;
-  padding: 28px 42px 18px;
 }
-.simulator-page h1, .simulator-page h2, .simulator-page p { margin: 0; color: inherit; font-family: inherit; }
-.simulator-page button { font: inherit; cursor: pointer; }
-.simulator-page button:focus-visible { outline: 3px solid #82a7cd; outline-offset: 5px; }
-.simulator-page button:disabled { opacity: .5; cursor: default; }
-.simulator-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; }
-.simulator-lesson-heading h1 { font-size: 18px; font-weight: 600; }
-.simulator-lesson-heading p { margin-top: 8px; color: #8b98a8; font-size: 14px; }
-.simulator-exit-button { justify-self: start; padding: 10px 0; border: 0; background: transparent; color: #7f8d9c; }
+
+.simulator-page h1,
+.simulator-page h2,
+.simulator-page p {
+  margin: 0;
+  font-family: inherit;
+}
+
+.simulator-page button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.simulator-page button:focus-visible {
+  outline: 3px solid #82a7cd;
+  outline-offset: 5px;
+}
+
+.simulator-page button:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
+.simulator-header {
+  display: grid;
+  grid-template-columns: minmax(85px, 1fr) minmax(0, auto) minmax(85px, 1fr);
+  align-items: center;
+  gap: 20px;
+}
+
+.simulator-lesson-heading h1 {
+  color: #263442;
+  font-size: clamp(16px, 1.15vw, 19px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -.025em;
+}
+
+.simulator-lesson-heading p {
+  margin-top: 9px;
+  color: #6f8093;
+  font-size: 14px;
+}
+
+.simulator-exit-button {
+  justify-self: start;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: #81909f;
+}
+
 .simulator-exit-button span { margin-right: 8px; }
-.simulator-end-button { justify-self: end; padding: 10px 16px; border: 1px solid #e2e9f0; border-radius: 12px; background: #fff; color: #556575; }
-.simulator-student { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 36px 0 24px; }
-.simulator-phase { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #9cadc0 !important; }
-.simulator-student-orb {
-  width: clamp(200px, 34vh, 410px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  margin: 34px 0;
-  background: radial-gradient(ellipse at 27% 16%, #fff 0%, #f3fbff 22%, #d9efff 45%, #9bd3f8 68%, #428bd8 87%, #3264b7 100%);
-  box-shadow: 0 22px 38px -22px #7597c43b, inset 0 0 24px #fff3;
+.simulator-exit-button:hover { color: #4873a9; }
+
+.simulator-end-button {
+  justify-self: end;
+  min-height: 44px;
+  padding: 10px 17px;
+  border: 1px solid #e3eaf2;
+  border-radius: 12px;
+  background: #ffffffb3;
+  color: #596879;
+  font-weight: 600 !important;
+  transition: background .2s, border-color .2s;
 }
-.simulator-student-orb-speaking { animation: simulator-speaking 2s ease-in-out infinite; }
-@keyframes simulator-speaking { 50% { transform: scale(1.025); box-shadow: 0 16px 45px #87b8ec40; } }
-.simulator-student h2 { font-size: 26px; font-weight: 500; letter-spacing: -.04em; }
-.simulator-status { margin-top: 10px !important; color: #8c9db0 !important; }
-.simulator-controls { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 20px; }
-.simulator-timer { font-variant-numeric: tabular-nums; font-size: 13px; letter-spacing: .15em; color: #8b9bb0 !important; }
-.simulator-microphone-button { width: 72px; height: 72px; border: 7px solid #eaf0f7; outline: 1px solid #e0e8f1; border-radius: 50%; background: #537fab; color: #fff; }
-.simulator-microphone-button[aria-pressed="true"] { background: #788695; }
-.simulator-microphone-icon { display: inline-block; position: relative; width: 17px; height: 23px; border: 2px solid currentColor; border-top: 0; border-radius: 0 0 12px 12px; }
-.simulator-microphone-icon::before { content: ""; position: absolute; width: 7px; height: 17px; left: 3px; top: -5px; border: 2px solid currentColor; border-radius: 6px; background: #537fab; }
-.simulator-microphone-icon::after { content: ""; position: absolute; width: 2px; height: 7px; left: 6px; bottom: -8px; background: currentColor; }
-.simulator-microphone-button[aria-pressed="true"] .simulator-microphone-icon { transform: rotate(-35deg); }
-.simulator-microphone-button[aria-pressed="true"] .simulator-microphone-icon::before { background: #788695; }
-.simulator-microphone-status, .simulator-disclosure { font-size: 11px; color: #91a0b1 !important; }
+
+.simulator-end-button:hover {
+  background: #fff;
+  border-color: #c8d8e8;
+}
+
+/* Keep the controls related to the student, rather than stretching this gap. */
+.simulator-student {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(24px, 4svh, 44px) 0 0;
+}
+
+.simulator-phase {
+  color: #a0b0c3;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.simulator-student-orb {
+  --orb-expansion: 0;
+  --orb-energy: 0;
+  position: relative;
+  isolation: isolate;
+  flex-shrink: 0;
+  width: min(62vw, clamp(175px, 31svh, 360px));
+  aspect-ratio: 1;
+  margin: clamp(24px, 4svh, 44px) 0 clamp(22px, 3svh, 32px);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 26% 16%, #fff 0%, #f7fcffef 25%, #eefaff80 46%, transparent 70%),
+    radial-gradient(ellipse at 76% 44%, #c6e6fc 0%, #a5d8fa90 36%, transparent 68%),
+    linear-gradient(180deg, #edf8fe 0%, #d5edfc 36%, #a6d9f9 62%, #5ba9e8 82%, #2872ca 100%);
+  box-shadow: inset 0 0 3px #ffffffa6, 0 24px 40px -25px #6b94c94d;
+  animation: simulator-orb-breathe 2.8s ease-in-out infinite;
+  transition: --orb-expansion 1s ease, --orb-energy 1s ease, filter 1s ease;
+}
+
+/* Blurred light and halo layers add depth without moving surrounding content. */
+.simulator-student-orb::before,
+.simulator-student-orb::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.simulator-student-orb::before {
+  inset: 6%;
+  background:
+    radial-gradient(ellipse at 28% 22%, #ffffffed 0%, #e7fbff85 32%, transparent 58%),
+    radial-gradient(ellipse at 62% 80%, #2072d0a6 0%, #54b9ed55 30%, transparent 60%);
+  filter: blur(13px);
+  animation: simulator-orb-light 3.7s ease-in-out infinite;
+}
+
+.simulator-student-orb::after {
+  z-index: -1;
+  inset: -10%;
+  background: radial-gradient(circle, transparent 46%, #76b7ed66 65%, transparent 75%);
+  filter: blur(18px);
+  animation: simulator-orb-glow 2.8s ease-in-out infinite;
+}
+
+.simulator-student-orb-listening { --orb-expansion: .004; --orb-energy: .08; }
+.simulator-student-orb-thinking { --orb-expansion: .012; --orb-energy: .35; }
+.simulator-student-orb-speaking { --orb-expansion: .04; --orb-energy: 1; filter: saturate(1.15); }
+.simulator-student-orb-error,
+.simulator-student-orb-ended { filter: saturate(.65); }
+
+/* The same cycles keep running across states. Only their strength blends,
+   so finishing speech settles smoothly without restarting a keyframe. */
+@keyframes simulator-orb-breathe {
+  0%, 100% { transform: translateY(calc(var(--orb-energy) * 2px)) scale(calc(1 - var(--orb-expansion) * .75)); }
+  38% { transform: translateY(calc(var(--orb-energy) * -4px)) scale(calc(1 + var(--orb-expansion))); }
+  72% { transform: translateY(calc(var(--orb-energy) * -1px)) scale(calc(1 + var(--orb-expansion) * .2)); }
+}
+
+@keyframes simulator-orb-light {
+  0%, 100% { transform: translate(calc(var(--orb-energy) * -5%), calc(var(--orb-energy) * 4%)) scale(1); opacity: .65; }
+  45% { transform: translate(calc(var(--orb-energy) * 7%), calc(var(--orb-energy) * -6%)) scale(calc(1 + var(--orb-energy) * .12)); opacity: calc(.65 + var(--orb-energy) * .3); }
+  75% { transform: translate(calc(var(--orb-energy) * 2%), calc(var(--orb-energy) * 3%)) scale(calc(1 + var(--orb-energy) * .04)); opacity: .7; }
+}
+
+@keyframes simulator-orb-glow {
+  0%, 100% { transform: scale(1); opacity: calc(.12 + var(--orb-energy) * .16); }
+  42% { transform: scale(calc(1 + var(--orb-energy) * .12)); opacity: calc(.15 + var(--orb-energy) * .6); }
+}
+
+.simulator-student h2 {
+  color: #263442;
+  font-size: clamp(22px, 1.7vw, 27px);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: 1.3;
+}
+
+.simulator-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 24px;
+  margin-top: 14px !important;
+  color: #687e95;
+  font-size: 14px;
+}
+
+.simulator-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 12px;
+  color: #91b0d0;
+}
+
+.simulator-status-indicator i { width: 2px; height: 4px; border-radius: 2px; background: currentColor; }
+.simulator-status-indicator i:nth-child(2) { height: 8px; }
+
+.simulator-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  padding-top: clamp(40px, 10svh, 112px);
+  padding-bottom: 12px;
+}
+
+.simulator-timer {
+  color: #778ba2;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  letter-spacing: .17em;
+}
+
+.simulator-microphone-button {
+  --microphone-fill: #537fac;
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 80px;
+  aspect-ratio: 1;
+  padding: 0;
+  /* Filled 60px blue centre, softly blended surround and 80px pale disc. */
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    var(--microphone-fill) 0 29px,
+    #dce7f2 30.5px,
+    #e7eef6 33px,
+    #edf2f8 39px,
+    #f0f4f9 40px);
+  box-shadow: none;
+  outline: none;
+  color: #fff;
+  transition: background .2s ease, transform .15s ease;
+}
+
+.simulator-microphone-button:hover:not(:disabled) {
+  --microphone-fill: #4b77a5;
+}
+
+.simulator-microphone-button:active:not(:disabled) { transform: scale(.97); }
+.simulator-microphone-button:focus-visible { outline: 2px solid #4873a9; outline-offset: 5px; }
+.simulator-microphone-button[aria-pressed="true"] { --microphone-fill: #6382a3; }
+.simulator-microphone-button[aria-pressed="true"]:hover:not(:disabled) { --microphone-fill: #597898; }
+
+.simulator-microphone-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* A strike-through makes mute distinguishable without relying on colour. */
+.simulator-microphone-slash {
+  position: absolute;
+  width: 25px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 0 0 1.5px var(--microphone-fill);
+  transform: rotate(-45deg);
+  opacity: 0;
+}
+
+.simulator-microphone-button[aria-pressed="true"] .simulator-microphone-slash { opacity: 1; }
+
+.simulator-accessible-description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .simulator-error { max-width: 480px; margin-top: 18px; color: #8a4545; font-size: 14px; }
 .simulator-error button { margin-top: 10px; padding: 8px 16px; border: 1px solid #d4e2ef; border-radius: 8px; background: #fff; color: #4873a9; }
 .simulator-empty { justify-content: center; gap: 20px; }
+
 @media (max-width: 600px) {
-  .simulator-page { padding: 20px 18px 16px; }
-  .simulator-header { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .simulator-page { padding: 18px 18px 20px; }
+  .simulator-header { grid-template-columns: 1fr 1fr; gap: 14px; }
   .simulator-lesson-heading { grid-row: 2; grid-column: 1 / -1; }
   .simulator-end-button { grid-column: 2; grid-row: 1; }
-  .simulator-student { padding-top: 28px; }
-  .simulator-student-orb { width: min(65vw, 290px); margin: 26px 0; }
+  .simulator-student { padding-top: 26px; }
+  .simulator-student-orb { width: min(60vw, 30svh, 280px); }
 }
-@media (prefers-reduced-motion: reduce) { .simulator-student-orb { animation: none; } }
+
+@media (max-height: 650px) {
+  .simulator-page { padding-top: 16px; padding-bottom: 14px; }
+  .simulator-student { padding-top: 20px; padding-bottom: 18px; }
+  .simulator-student-orb { width: min(48vw, 28svh, 220px); margin-block: 18px; }
+  .simulator-status { margin-top: 8px !important; }
+  .simulator-controls { padding-top: 8px; gap: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simulator-student-orb,
+  .simulator-student-orb::before,
+  .simulator-student-orb::after { animation: none; transition: none; transform: none; }
+  /* Static lighting still distinguishes processing and speaking. */
+  .simulator-student-orb-thinking { filter: saturate(.85) brightness(1.03); }
+  .simulator-student-orb::before { opacity: .65; }
+  .simulator-student-orb::after { opacity: calc(.15 + var(--orb-energy) * .5); }
+  .simulator-student-orb-speaking { filter: saturate(1.15); }
+}
