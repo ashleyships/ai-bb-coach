@@ -1,3 +1,4 @@
+import { realtimeApiPlugin } from './server/realtimeApiPlugin.ts'
 import { speechApiPlugin } from './server/speechApiPlugin.ts'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
@@ -18,6 +19,9 @@ export default defineConfig(({ mode }) => {
     }), speechApiPlugin({
       apiKey: process.env.OPENAI_API_KEY ?? env.OPENAI_API_KEY,
       model: process.env.OPENAI_SPEECH_MODEL ?? env.OPENAI_SPEECH_MODEL,
+    }), realtimeApiPlugin({
+      apiKey: process.env.OPENAI_API_KEY ?? env.OPENAI_API_KEY,
+      model: process.env.OPENAI_REALTIME_MODEL ?? env.OPENAI_REALTIME_MODEL,
     })],
   };
 })

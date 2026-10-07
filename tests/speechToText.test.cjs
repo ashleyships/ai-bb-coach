@@ -177,29 +177,3 @@ test('frontend posts raw audio only to transcription and rejects malformed outpu
     await assert.rejects(api.requestTranscription(audio, new AbortController().signal), error => !error.message.includes('secret'));
   }
 });
-
-test('page appends transcription to draft without sending; Send remains explicit', () => {
-  let draft = 'Existing words', sends = 0, transcribe;
-  const jsx = (type, props) => typeof type === 'function' ? type(props) : { type, props };
-  const { presetStudents } = load('src/data/presetStudents.ts');
-  const session = { id: 's1', lessonId: 'tree-by-streams', student: presetStudents[0], difficulty: 'beginner', practiceScope: 'full', messages: [] };
-  const page = loader({
-    'react-router-dom': { Link: 'a', useLocation: () => ({ key: 'test', state: session }) },
-    'react/jsx-runtime': { jsx, jsxs: jsx, Fragment: 'fragment' },
-    '../assets/emblem.jpg': {}, './LessonSimulatorPage.css': {},
-    '../hooks/useLessonConversation': { useLessonConversation: () => ({
-      session, draft, setDraft: value => { draft = typeof value === 'function' ? value(draft) : value; },
-      isSending: false, error: '', canRetry: false, sendMessage: () => { sends++; }, retryResponse() {},
-    }) },
-    '../hooks/useStudentSpeech': { useStudentSpeech: () => ({ status: 'idle', error: '', canReplay: false, stop() {}, replay() {} }) },
-    '../hooks/useSpeechToText': { useSpeechToText: callback => {
-      transcribe = callback; return { status: 'idle', isBusy: false, error: '', startRecording() {}, stopRecording() {} };
-    } },
-  })('src/pages/LessonSimulatorPage.tsx').default;
-  let tree = page(); transcribe('Spoken words');
-  assert.equal(draft, 'Existing words\nSpoken words'); assert.equal(sends, 0);
-  tree = page();
-  function nodes(n) { if (!n || typeof n !== 'object') return []; if (Array.isArray(n)) return n.flatMap(nodes); return [n, ...nodes(n.props?.children)]; }
-  const form = nodes(tree).find(n => n.type === 'form');
-  form.props.onSubmit({ preventDefault() {} }); assert.equal(sends, 1);
-});

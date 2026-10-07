@@ -183,3 +183,75 @@ and End Lesson during loading/playback prevents late audio. Simulate a failed
 speech request and confirm typing, microphone transcription, and Send still work.
 Offline tests mock provider responses and browser audio; real playback and API
 access require manual browser verification.
+
+## Natural realtime lessons (Phase 2C — active simulator)
+
+The main simulator now uses WebRTC speech-to-speech. Begin Lesson connects once;
+allow microphone access and speak naturally. There are no manual Record/Send/Play
+steps. The orb screen shows Listening, Thinking, Speaking, or a recoverable error.
+Its microphone button means mute/unmute. Exit and End Lesson both stop the call
+and return to the preserved Practice Setup screen.
+
+`POST /api/realtime/session` exchanges the browser SDP offer for an OpenAI answer
+through the unified `/v1/realtime/calls` interface. The permanent `OPENAI_API_KEY`
+never leaves the server. Optional `OPENAI_REALTIME_MODEL` defaults to
+`gpt-realtime-2.1`. Voice is `marin`; input transcription uses `gpt-transcribe`.
+Restart Vite after changing server configuration. No dependencies were added.
+This retains the existing local dev/preview server architecture; static hosting
+alone cannot provide these endpoints.
+
+**Teaching turn tuning:** edit `server/realtimeConfig.ts`, specifically
+`teachingTurnDetection`. It starts with semantic VAD, `eagerness: "low"`,
+`create_response: true`, and `interrupt_response: false`. Low eagerness allows
+natural unfinished pauses while still responding to clear endings. Semantic VAD
+uses meaning as well as audio; it is not a fixed silence timer. Test with real
+teaching speech before changing eagerness. No turn timing is hidden in the hook.
+
+Intentional teacher mute, automatic microphone suppression during student
+thinking/speaking, and microphone hardware/permission failures are distinct.
+Microphone audio is disabled until student playback finishes; generation finishing
+alone does not reopen it. Muting clears uncommitted input (a partially spoken turn
+may be discarded). Echo cancellation is requested. Interrupting the student is
+not supported in this phase.
+
+`useRealtimeLesson` composes the lifecycle controller in
+`src/services/realtimeLesson.ts`. `useLessonTimer` owns elapsed display time.
+`realtimeTranscript.ts` merges teacher and student transcript events by item ID
+and conversation order. Event IDs prevent repeated deltas. Partial, failed, and
+interrupted entries are retained; generated student text and interrupted playback
+are distinguished. Transcription is best-effort and may differ from actual speech.
+The old synthetic greeting is excluded from the realtime transcript.
+
+The layout retains session records by lesson ID in React state when returning to
+Setup. They are available through its typed Outlet context for a future evaluation
+phase. They do not survive refresh or leaving the practice layout; there is no
+persistence/history UI. End closes media immediately, so transcription not yet
+received is marked incomplete rather than claimed as complete. Reconnect restores
+completed text turns as context without replaying them, retaining the mute choice
+and original timer start. Error time remains part of elapsed lesson time until End.
+
+The Phase 1–2B hooks, API helpers and endpoints remain intact as reusable code;
+they are no longer mounted by the active simulator. This is not an automatic
+fallback UI. Earlier README sections describe those retained implementations.
+
+Manual browser checks (localhost or HTTPS):
+- Begin once, allow microphone access, explain something with brief and longer
+  pauses. Confirm automatic response and repeated Listening → Thinking → Speaking
+  → Listening cycles without buttons.
+- Test loudspeaker output and headphones: student audio must not become teacher
+  input. Confirm the microphone remains suppressed through the end of playback.
+- Mute while listening and while the student speaks; after playback it must stay
+  muted. Unmute during playback must not enable capture prematurely.
+- Deny permission, unplug the microphone, block playback, disconnect the network,
+  and retry. Check errors, resource release and retained transcript/context.
+  Browser playback policy may require allowing site audio before reconnecting.
+- Exit/End while permission is pending, connecting, thinking and speaking. Check
+  the microphone indicator turns off, audio stops, and no late response occurs.
+- Inspect PracticeFlowLayout state in React DevTools: teacher/student entries,
+  correct order, no duplicates, incomplete/failed markers and stopped timer.
+- Check mobile layout, keyboard focus, Chrome and Safari. Test the actual OpenAI
+  connection with an account that has access to the configured model.
+
+Run `npm run build`, `npm run lint`, and `npm test`. Realtime tests use offline
+WebRTC/media/provider doubles, including cancellation, mute/suppression, ordering,
+recovery, cleanup and endpoint validation. They do not verify live audio quality.
